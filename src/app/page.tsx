@@ -53,10 +53,26 @@ export default async function Home() {
         <div className="absolute top-1/2 right-0 h-96 w-96 -translate-y-1/2 rounded-full bg-emerald-600/4 blur-[80px]" />
       </div>
 
-      <div className="relative mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+      <div className="relative mx-auto max-w-5xl px-2 py-6 sm:px-4 sm:py-10 md:px-6 md:py-12">
+
+        {/* ── Hero Section ── */}
+        <section className="mb-8 flex flex-col items-center text-center gap-3 sm:mb-10 sm:gap-4">
+          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
+            <img src="/logo.svg" alt="Logo" className="h-12 w-12 rounded-xl bg-white p-1 shadow" />
+            <span className="text-2xl font-extrabold tracking-tight text-emerald-200 drop-shadow sm:text-3xl">{masjid.name}</span>
+          </div>
+          <p className="max-w-xs text-sm text-white/60 sm:max-w-xl sm:text-base">
+            Welcome to the {masjid.name}! View today’s prayer times, Jumu’ah schedule, and more. Stay connected with your masjid community.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 mt-2 sm:gap-3 w-full sm:w-auto">
+            <a href="/display" className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-xs font-semibold text-white/70 hover:bg-white/20 transition w-full sm:w-auto text-center">TV Display</a>
+            <a href="/api/ical" download="prayer-times.ics" className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-colors w-full sm:w-auto text-center">Export iCal</a>
+            <a href="#donate" className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-xs font-semibold text-amber-200 hover:bg-amber-400/20 transition-colors w-full sm:w-auto text-center">Donate</a>
+          </div>
+        </section>
 
         {/* ── Header ── */}
-        <header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-4">
             {/* Logo */}
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white p-2 shadow-lg">
@@ -79,7 +95,7 @@ export default async function Home() {
           </div>
 
           {/* Date card */}
-          <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 px-5 py-4 sm:text-right">
+          <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 px-5 py-4 sm:text-right mt-4 sm:mt-0">
             <div className="text-[10px] font-semibold uppercase tracking-widest text-white/30">Today</div>
             <div className="mt-1 text-base font-semibold">{today}</div>
             <div className="mt-0.5 text-[11px] text-white/35">{masjid.timezone}</div>
@@ -95,7 +111,7 @@ export default async function Home() {
         </div>
 
         {/* ── Main grid ── */}
-        <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_300px]">
+        <div className="mt-4 grid gap-4 md:grid-cols-1 lg:grid-cols-[1fr_300px]">
 
           {/* Prayer times */}
           <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
@@ -180,17 +196,34 @@ export default async function Home() {
           </aside>
         </div>
 
+        {/* ── Donate Section ── */}
+        <section id="donate" className="mt-10 flex flex-col items-center gap-3 rounded-3xl border border-emerald-500/10 bg-emerald-500/5 px-3 py-6 text-center sm:mt-12 sm:gap-4 sm:px-6 sm:py-8">
+          <h2 className="text-base font-bold text-emerald-200 flex items-center gap-2 sm:text-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3 0 1.657 1.343 3 3 3s3-1.343 3-3c0-1.657-1.343-3-3-3zm0 0V4m0 16v-4m8-4h-4m-8 0H4" /></svg>
+            Support Your Masjid
+          </h2>
+          <p className="text-white/60 max-w-xs text-sm sm:max-w-md sm:text-base">Help us maintain and grow our community. Every donation makes a difference!</p>
+          <img src="/donation-qr.png" alt="Donation QR" className="h-32 w-32 rounded-xl border border-white/10 bg-white/10 p-2 shadow sm:h-36 sm:w-36" />
+          <div className="text-xs text-white/30">Scan to donate</div>
+        </section>
+
         {/* ── Footer ── */}
-        <footer className="mt-10 flex flex-col items-center gap-2 border-t border-white/8 pt-6 text-center">
-          <p className="text-xs text-white/25">
-            &copy; {new Date().getFullYear()} {masjid.name} &middot; Times shown in {masjid.timezone}
-          </p>
-          <a
-            href="/admin"
-            className="text-[11px] text-white/15 transition-colors hover:text-white/40"
-          >
-            Admin
-          </a>
+        <footer className="mt-8 flex flex-col items-center gap-2 border-t border-white/8 pt-5 text-center sm:mt-10 sm:pt-6">
+          <div className="flex flex-col gap-1 items-center justify-center sm:flex-row sm:gap-2">
+            <span className="text-xs text-white/25">
+              &copy; {new Date().getFullYear()} {masjid.name} &middot; Times shown in {masjid.timezone}
+            </span>
+            <span className="hidden sm:inline text-xs text-white/15 mx-2">|</span>
+            <a
+              href="/admin"
+              className="text-[11px] text-white/15 transition-colors hover:text-white/40"
+            >
+              Admin
+            </a>
+          </div>
+          <div className="mt-1 text-xs text-white/20">
+            <span>Location: {masjid.coordinates.lat}, {masjid.coordinates.lon}</span>
+          </div>
         </footer>
 
       </div>
@@ -209,15 +242,14 @@ function PrayerRow(props: {
   const isNext = props.isNext;
   return (
     <div
-      className={[
-        "flex items-center rounded-2xl border px-4 py-3.5",
+      className={["flex flex-col xs:flex-row items-center rounded-2xl border px-3 py-3 sm:px-4 sm:py-3.5",
         isNext
           ? "border-emerald-500/30 bg-emerald-500/[0.08] shadow-[0_0_24px_rgba(16,185,129,0.06)]"
           : "border-white/8 bg-black/15",
       ].join(" ")}
     >
       {/* Label */}
-      <div className="flex min-w-0 flex-1 items-center gap-2">
+      <div className="flex min-w-0 flex-1 items-center gap-2 mb-2 xs:mb-0">
         {isNext && (
           <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
         )}
@@ -236,12 +268,12 @@ function PrayerRow(props: {
       </div>
 
       {/* Times */}
-      <div className="flex shrink-0 gap-6 sm:gap-10">
-        <div className="text-right">
+      <div className="flex shrink-0 gap-4 xs:gap-6 sm:gap-10 w-full xs:w-auto">
+        <div className="flex-1 text-right">
           <div className="text-[10px] font-medium uppercase tracking-wider text-white/25">Adhan</div>
           <div className="mt-0.5 text-sm font-semibold tabular-nums">{props.adhan}</div>
         </div>
-        <div className="w-[90px] text-right">
+        <div className="flex-1 w-[70px] xs:w-[90px] text-right">
           <div className="text-[10px] font-medium uppercase tracking-wider text-white/25">Jamaat</div>
           <div
             className={`mt-0.5 text-sm font-semibold tabular-nums ${

@@ -72,6 +72,10 @@ The admin panel is accessible at `/admin`. It requires the `ADMIN_PASSCODE` you 
 * Add or remove multiple Jumu'ah prayer slots.
 * Changes are synchronized across both local storage and the cloud (if configured).
 
+## Google Calendar / iCal Export
+
+You can export the prayer schedule as an iCal (.ics) file compatible with Google Calendar and other calendar apps. Look for the "Export iCal for Google Calendar" button on the homepage, or download directly from [`/api/ical`](http://localhost:3000/api/ical).
+
 ## Deployment
 
 This project is optimized for the [Vercel Platform](https://vercel.com/new). When deploying:

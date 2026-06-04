@@ -53,7 +53,7 @@ export default async function Home() {
         <div className="absolute top-1/2 right-0 h-96 w-96 -translate-y-1/2 rounded-full bg-emerald-600/4 blur-[80px]" />
       </div>
 
-      <div className="relative mx-auto max-w-5xl px-2 py-6 sm:px-4 sm:py-10 md:px-6 md:py-12">
+      <div className="relative mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10 md:px-8 md:py-12">
 
         {/* ── Hero Section ── */}
         <section className="mb-8 flex flex-col items-center text-center gap-3 sm:mb-10 sm:gap-4">
@@ -61,13 +61,13 @@ export default async function Home() {
             <img src="/logo.svg" alt="Logo" className="h-12 w-12 rounded-xl bg-white p-1 shadow" />
             <span className="text-2xl font-extrabold tracking-tight text-emerald-200 drop-shadow sm:text-3xl">{masjid.name}</span>
           </div>
-          <p className="max-w-xs text-sm text-white/60 sm:max-w-xl sm:text-base">
+          <p className="max-w-xs text-sm text-white/70 sm:max-w-xl sm:text-base">
             Welcome to the {masjid.name}! View today’s prayer times, Jumu’ah schedule, and more. Stay connected with your masjid community.
           </p>
-          <div className="flex flex-wrap justify-center gap-2 mt-2 sm:gap-3 w-full sm:w-auto">
-            <a href="/display" className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-xs font-semibold text-white/70 hover:bg-white/20 transition w-full sm:w-auto text-center">TV Display</a>
-            <a href="/api/ical" download="prayer-times.ics" className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-colors w-full sm:w-auto text-center">Export iCal</a>
-            <a href="#donate" className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-xs font-semibold text-amber-200 hover:bg-amber-400/20 transition-colors w-full sm:w-auto text-center">Donate</a>
+          <div className="flex flex-wrap justify-center gap-3 mt-2 w-full sm:w-auto">
+            <a href="/display" className="rounded-xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white/80 hover:bg-white/20 transition w-full sm:w-auto text-center">TV Display</a>
+            <a href="/api/ical" download="prayer-times.ics" className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-colors w-full sm:w-auto text-center">Export iCal</a>
+            <a href="#donate" className="rounded-xl border border-amber-400/40 bg-amber-400/10 px-5 py-2.5 text-sm font-semibold text-amber-200 hover:bg-amber-400/20 transition-colors w-full sm:w-auto text-center">Donate</a>
           </div>
         </section>
 
@@ -81,14 +81,14 @@ export default async function Home() {
             </div>
 
             <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-[11px] font-medium text-emerald-300">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
                 Live Adhan + Jamaat
               </div>
               <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
                 {masjid.name}
               </h1>
-              <p className="mt-1 text-xs text-white/40">
+              <p className="mt-1 text-xs text-white/50">
                 {masjid.calc.method.replaceAll("_", " ")} &middot; {masjid.calc.fajrAngle}&deg;/{masjid.calc.ishaAngle}&deg; &middot; Hanafi Asr
               </p>
             </div>
@@ -96,16 +96,16 @@ export default async function Home() {
 
           {/* Date card */}
           <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 px-5 py-4 sm:text-right mt-4 sm:mt-0">
-            <div className="text-[10px] font-semibold uppercase tracking-widest text-white/30">Today</div>
+            <div className="text-xs font-semibold uppercase tracking-widest text-white/50">Today</div>
             <div className="mt-1 text-base font-semibold">{today}</div>
-            <div className="mt-0.5 text-[11px] text-white/35">{masjid.timezone}</div>
+            <div className="mt-0.5 text-xs text-white/50">{masjid.timezone}</div>
           </div>
         </header>
 
         {/* ── Sunrise strip ── */}
-        <div className="mt-8 flex items-center gap-3 rounded-2xl border border-amber-400/15 bg-amber-400/5 px-5 py-3.5">
-          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300/60">Sunrise</span>
-          <span className="ml-auto font-semibold tabular-nums text-amber-200/70">
+        <div className="mt-8 flex items-center gap-3 rounded-2xl border border-amber-400/25 bg-amber-400/5 px-5 py-3.5">
+          <span className="text-sm font-semibold uppercase tracking-widest text-amber-300/80">Sunrise</span>
+          <span className="ml-auto text-sm font-semibold tabular-nums text-amber-200/80">
             {fmtTime(adhan.sunrise)}
           </span>
         </div>
@@ -116,10 +116,10 @@ export default async function Home() {
           {/* Prayer times */}
           <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
             <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-xs font-semibold uppercase tracking-widest text-white/40">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-white/60">
                 Today&apos;s Prayer Times
               </h2>
-              <div className="flex gap-5 text-[10px] font-semibold uppercase tracking-widest text-white/20">
+              <div className="flex gap-5 text-xs font-semibold uppercase tracking-widest text-white/40">
                 <span>Adhan</span>
                 <span>Jamaat</span>
               </div>
@@ -143,7 +143,7 @@ export default async function Home() {
 
             {/* Jummah schedule */}
             <section className="rounded-3xl border border-amber-400/15 bg-amber-400/[0.04] p-5">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-amber-300/60">
+              <h3 className="text-sm font-semibold uppercase tracking-widest text-amber-300/80">
                 Jumu&apos;ah Schedule
               </h3>
 
@@ -157,7 +157,7 @@ export default async function Home() {
                       className="rounded-2xl border border-white/8 bg-black/20 p-4"
                     >
                       {allJummah.length > 1 && (
-                        <div className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-white/30">
+                        <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-white/50">
                           {i === 0 ? "1st" : i === 1 ? "2nd" : `${i + 1}th`} Jumu&apos;ah
                         </div>
                       )}
@@ -208,20 +208,20 @@ export default async function Home() {
         </section>
 
         {/* ── Footer ── */}
-        <footer className="mt-8 flex flex-col items-center gap-2 border-t border-white/8 pt-5 text-center sm:mt-10 sm:pt-6">
-          <div className="flex flex-col gap-1 items-center justify-center sm:flex-row sm:gap-2">
-            <span className="text-xs text-white/25">
+        <footer className="mt-8 flex flex-col items-center gap-3 border-t border-white/10 pt-5 text-center sm:mt-10 sm:pt-6">
+          <div className="flex flex-col gap-2 items-center justify-center sm:flex-row sm:gap-3">
+            <span className="text-xs text-white/40">
               &copy; {new Date().getFullYear()} {masjid.name} &middot; Times shown in {masjid.timezone}
             </span>
-            <span className="hidden sm:inline text-xs text-white/15 mx-2">|</span>
+            <span className="hidden sm:inline text-xs text-white/25 mx-1">|</span>
             <a
               href="/admin"
-              className="text-[11px] text-white/15 transition-colors hover:text-white/40"
+              className="rounded-lg border border-white/20 bg-white/5 px-4 py-1.5 text-sm font-medium text-white/50 transition-colors hover:bg-white/10 hover:text-white/80"
             >
               Admin
             </a>
           </div>
-          <div className="mt-1 text-xs text-white/20">
+          <div className="mt-1 text-xs text-white/35">
             <span>Location: {masjid.coordinates.lat}, {masjid.coordinates.lon}</span>
           </div>
         </footer>
@@ -242,42 +242,42 @@ function PrayerRow(props: {
   const isNext = props.isNext;
   return (
     <div
-      className={["flex flex-col xs:flex-row items-center rounded-2xl border px-3 py-3 sm:px-4 sm:py-3.5",
+      className={["flex flex-row items-center rounded-2xl border px-4 py-3.5",
         isNext
           ? "border-emerald-500/30 bg-emerald-500/[0.08] shadow-[0_0_24px_rgba(16,185,129,0.06)]"
-          : "border-white/8 bg-black/15",
+          : "border-white/10 bg-black/15",
       ].join(" ")}
     >
       {/* Label */}
-      <div className="flex min-w-0 flex-1 items-center gap-2 mb-2 xs:mb-0">
+      <div className="flex min-w-0 flex-1 items-center gap-2">
         {isNext && (
           <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
         )}
         <span
-          className={`text-sm font-semibold ${
-            isNext ? "text-emerald-200" : "text-white/75"
+          className={`text-base font-semibold ${
+            isNext ? "text-emerald-200" : "text-white/80"
           }`}
         >
           {props.label}
         </span>
         {isNext && (
-          <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
+          <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-400">
             Next
           </span>
         )}
       </div>
 
       {/* Times */}
-      <div className="flex shrink-0 gap-4 xs:gap-6 sm:gap-10 w-full xs:w-auto">
-        <div className="flex-1 text-right">
-          <div className="text-[10px] font-medium uppercase tracking-wider text-white/25">Adhan</div>
+      <div className="flex shrink-0 gap-6 sm:gap-10">
+        <div className="w-[72px] text-right">
+          <div className="text-xs font-medium uppercase tracking-wider text-white/40">Adhan</div>
           <div className="mt-0.5 text-sm font-semibold tabular-nums">{props.adhan}</div>
         </div>
-        <div className="flex-1 w-[70px] xs:w-[90px] text-right">
-          <div className="text-[10px] font-medium uppercase tracking-wider text-white/25">Jamaat</div>
+        <div className="w-[72px] text-right">
+          <div className="text-xs font-medium uppercase tracking-wider text-white/40">Jamaat</div>
           <div
             className={`mt-0.5 text-sm font-semibold tabular-nums ${
-              props.jamaat ? "text-emerald-300" : "text-white/20"
+              props.jamaat ? "text-emerald-300" : "text-white/30"
             }`}
           >
             {props.jamaat ?? "—"}

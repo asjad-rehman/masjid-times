@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { createSessionToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
@@ -22,9 +23,10 @@ export async function POST(req: Request) {
     }
 
     const cookieStore = await cookies();
+    const token = createSessionToken();
 
-    // Set secure cookie
-    cookieStore.set("admin_session", "ok", {
+    // Set secure cookie with HMAC-signed token
+    cookieStore.set("admin_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

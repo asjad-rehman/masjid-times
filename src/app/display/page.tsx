@@ -215,12 +215,13 @@ export default function DisplayPage() {
   const adhanToday = useMemo(() => calculateAdhanTimes(todayTz), [todayTz]);
   const adhanTomorrow = useMemo(() => calculateAdhanTimes(tomorrowTz), [tomorrowTz]);
 
+  // BUG #2 FIX: use real `now` (UTC) for comparisons, not the fake nowInMasjidTZ
   const next = useMemo(
-    () => getNextPrayerInfo(nowTz, adhanToday, adhanTomorrow),
-    [nowTz, adhanToday, adhanTomorrow]
+    () => getNextPrayerInfo(now, adhanToday, adhanTomorrow),
+    [now, adhanToday, adhanTomorrow]
   );
 
-  const countdown = useMemo(() => msToHMS(next.at.getTime() - nowTz.getTime()), [next, nowTz]);
+  const countdown = useMemo(() => msToHMS(next.at.getTime() - now.getTime()), [next, now]);
 
   const friday = isFriday(now);
   const todayDate = formatDate(now);

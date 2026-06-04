@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { getJamaatTimes, saveJamaatTimes, type Jamaat } from "@/lib/db";
+import { isValidSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export async function POST(req: Request) {
   const cookieStore = await cookies();
   const session = cookieStore.get("admin_session")?.value;
 
-  if (session !== "ok") {
+  if (!isValidSession(session)) {
     return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
 
@@ -41,6 +42,7 @@ export async function POST(req: Request) {
       jummah: candidate.jummah || existing.jummah 
     };
 
+    // saveJamaatTimes automatically sets updatedAt
     await saveJamaatTimes(mergedData);
     return Response.json({ ok: true });
   } catch (error) {

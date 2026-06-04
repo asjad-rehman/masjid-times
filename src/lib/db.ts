@@ -1,4 +1,4 @@
-import { kv } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -12,6 +12,7 @@ export type Jamaat = {
   isha: string;
   jummah: JummahSlot[];
   jummah2?: JummahSlot[]; // Optional second slot for display page
+  updatedAt?: string; // ISO 8601 timestamp of last admin update
 };
 
 const DEFAULTS: Jamaat = {
@@ -21,14 +22,27 @@ const DEFAULTS: Jamaat = {
   maghrib: "17:55",
   isha: "19:30",
   jummah: [{ khutbah: "12:45", salah: "13:15" }],
-  jummah2: [{ khutbah: "13:15", salah: "13:45" }], // Default second slot
+  jummah2: [{ khutbah: "13:15", salah: "13:45" }],
 };
 
 const FS_DATA_PATH = path.join(process.cwd(), "data", "jamaat.json");
 
-// Helper to check if Vercel KV is configured
-const hasKV = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+// Helper to check if Upstash Redis is configured
+// Support both Upstash env vars and legacy Vercel KV env vars
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+const hasRedis = !!(redisUrl && redisToken);
 const isVercelRuntime = process.env.VERCEL === "1";
+
+// Lazily initialize Redis client only when needed
+let _redis: Redis | null = null;
+function getRedis(): Redis | null {
+  if (!hasRedis) return null;
+  if (!_redis) {
+    _redis = new Redis({ url: redisUrl!, token: redisToken! });
+  }
+  return _redis;
+}
 
 function isValidJamaat(x: unknown): x is Jamaat {
   if (!x || typeof x !== "object") return false;
@@ -46,14 +60,15 @@ function isValidJamaat(x: unknown): x is Jamaat {
 }
 
 export async function getJamaatTimes(): Promise<Jamaat> {
-  async function readFromKV() {
-    if (!hasKV) return null;
+  async function readFromRedis() {
+    const redis = getRedis();
+    if (!redis) return null;
 
     try {
-      const data = await kv.get<Jamaat>("jamaat_times");
+      const data = await redis.get<Jamaat>("jamaat_times");
       if (data && isValidJamaat(data)) return data;
     } catch (error) {
-      console.error("KV Read Error:", error);
+      console.error("Redis Read Error:", error);
     }
 
     return null;
@@ -71,11 +86,11 @@ export async function getJamaatTimes(): Promise<Jamaat> {
     return null;
   }
 
-  // In local dev, filesystem is the source of truth. On Vercel, prefer KV.
-  const preferred = isVercelRuntime ? await readFromKV() : await readFromFS();
+  // In local dev, filesystem is the source of truth. On Vercel, prefer Redis.
+  const preferred = isVercelRuntime ? await readFromRedis() : await readFromFS();
   if (preferred) return preferred;
 
-  const fallback = isVercelRuntime ? await readFromFS() : await readFromKV();
+  const fallback = isVercelRuntime ? await readFromFS() : await readFromRedis();
   if (fallback) return fallback;
 
   return DEFAULTS;
@@ -84,13 +99,17 @@ export async function getJamaatTimes(): Promise<Jamaat> {
 export async function saveJamaatTimes(data: Jamaat): Promise<void> {
   if (!isValidJamaat(data)) throw new Error("Invalid payload");
 
-  // 1. Save to Vercel KV
-  if (hasKV) {
+  // Stamp the update time
+  data.updatedAt = new Date().toISOString();
+
+  // 1. Save to Upstash Redis
+  const redis = getRedis();
+  if (redis) {
     try {
-      await kv.set("jamaat_times", data);
+      await redis.set("jamaat_times", data);
     } catch (error) {
-      // Do not block local persistence if KV is misconfigured/unavailable.
-      console.error("KV Write Error:", error);
+      // Do not block local persistence if Redis is misconfigured/unavailable.
+      console.error("Redis Write Error:", error);
     }
   }
 
@@ -100,6 +119,6 @@ export async function saveJamaatTimes(data: Jamaat): Promise<void> {
     await fs.writeFile(FS_DATA_PATH, JSON.stringify(data, null, 2), "utf8");
   } catch (error) {
     // If running in a read-only serverless environment, this might fail, which is expected.
-    if (!hasKV) console.error("FS Write Error:", error);
+    if (!hasRedis) console.error("FS Write Error:", error);
   }
 }

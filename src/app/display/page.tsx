@@ -252,44 +252,41 @@ export default function DisplayPage() {
   const currentAyah = QURAN_AYAHS[ayahIndex];
 
   return (
-    <main className="h-screen w-screen overflow-hidden bg-[#fdfbf7] text-[#1a1a2e] flex flex-col font-serif">
+    <main className="h-screen w-screen overflow-hidden bg-[#fdfbf7] text-[#1a1a2e] font-serif">
+      {/* Full-page grid: header | tiles | footer */}
+      <div className="h-full w-full p-4 md:p-6 grid grid-rows-[auto_1fr_auto] gap-3 md:gap-4">
 
-      <div
-        className={[
-          "flex-1 min-h-0 w-full p-4 md:p-6 flex flex-col gap-4 md:gap-5 relative z-10",
-        ].join(" ")}
-      >
-        {/* Header */}
-        <header className="flex items-center justify-between">
+        {/* ── Header ── */}
+        <header className="flex items-center justify-between shrink-0">
           <div className="flex items-center gap-6">
             <Image
               src="/logo.png"
               alt={masjid.name}
               width={280}
               height={140}
-              className="object-contain max-h-[100px] md:max-h-[140px] w-auto"
+              className="object-contain max-h-[80px] md:max-h-[110px] w-auto"
               priority
             />
-            <div className="opacity-60 text-[clamp(14px,1.5vw,22px)] self-end pb-2">
+            <div className="opacity-60 text-[clamp(14px,1.5vw,22px)] whitespace-nowrap">
               {todayDate}
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white shadow-sm border border-black/10 px-6 py-4 text-center">
-            <div className="font-semibold tabular-nums text-[clamp(26px,2.8vw,52px)]">
+          <div className="rounded-2xl bg-white shadow-sm border border-black/10 px-6 py-3 text-center shrink-0">
+            <div className="font-semibold tabular-nums text-[clamp(26px,2.8vw,52px)] whitespace-nowrap">
               {clock}
             </div>
-            <div className="mt-1 text-[clamp(11px,1vw,16px)] opacity-60 tabular-nums">
+            <div className="mt-1 text-[clamp(11px,1vw,16px)] opacity-60 tabular-nums whitespace-nowrap">
               Next: <span className="font-semibold text-amber-700">{nextLabel}</span>{" "}
               in <span className="font-semibold text-amber-700">{countdown}</span>
             </div>
           </div>
         </header>
 
-        {/* Tiles */}
+        {/* ── Prayer Tiles ── */}
         <section
           className={[
-            "flex-1 min-h-0 grid gap-4 md:gap-5",
+            "min-h-0 grid gap-3 md:gap-4",
             isPortraitScreen ? "grid-cols-2 grid-rows-3" : "grid-cols-3 grid-rows-2",
           ].join(" ")}
         >
@@ -321,46 +318,48 @@ export default function DisplayPage() {
             );
           })}
 
-          {/* Donation QR Code Tile */}
           <DonationTile />
         </section>
 
-        {/* Footer with Integrated Verse */}
-        <footer className="rounded-2xl bg-white shadow-sm border border-black/10 flex flex-col justify-center px-6 py-4 shrink-0 gap-4 mt-auto">
-          {/* Verse */}
-          <div className="text-center transition-opacity duration-500 w-full" style={{ opacity: ayahFading ? 0 : 1 }}>
-            <div className="flex flex-col items-center">
-              <span className="font-arabic text-xl md:text-2xl mb-1 text-[#2b2216]">{currentAyah.arabic}</span>
-              <span className="italic text-sm md:text-base text-[#2b2216]/80">&ldquo;{currentAyah.english}&rdquo;</span>
-              <span className="text-xs text-[#8b1e0b] mt-1">[{currentAyah.ref}]</span>
-            </div>
+        {/* ── Footer (verse + info bar) ── */}
+        <footer className="rounded-2xl bg-white shadow-sm border border-black/10 px-6 py-3 shrink-0">
+          {/* Quran Verse */}
+          <div
+            className="text-center transition-opacity duration-500 mb-2"
+            style={{ opacity: ayahFading ? 0 : 1 }}
+          >
+            <span className="font-arabic text-lg md:text-xl text-[#2b2216]">{currentAyah.arabic}</span>
+            <br />
+            <span className="italic text-sm text-[#2b2216]/80">&ldquo;{currentAyah.english}&rdquo;</span>
+            <span className="text-xs text-[#8b1e0b] ml-2">[{currentAyah.ref}]</span>
           </div>
 
-          <div className="w-full h-px bg-black/5" />
+          <div className="w-full h-px bg-black/5 mb-2" />
 
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-3 min-w-0">
+          {/* Info row: Jummah times + Next prayer */}
+          <div className="flex items-center justify-between whitespace-nowrap">
+            <div className="flex items-center gap-3">
               <span className="text-[clamp(14px,1.4vw,24px)] text-amber-700">&#9774;</span>
-              <div className="text-[clamp(14px,1.4vw,26px)]">
-                Jumu&apos;ah:{" "}
-                <span className="font-semibold text-amber-800 whitespace-nowrap">
+              <span className="text-[clamp(14px,1.4vw,26px)]">
+                Jumu&apos;ah:&nbsp;
+                <span className="font-semibold text-amber-800">
                   1st &mdash; {fmt12From24(jummah1Time)}
                   &nbsp;&nbsp;&bull;&nbsp;&nbsp;
                   2nd &mdash; {fmt12From24(jummah2Time)}
                 </span>
-              </div>
+              </span>
             </div>
 
-            <div className="text-right shrink-0 flex items-center gap-3">
-              <div className="text-[clamp(11px,1vw,16px)] opacity-50 whitespace-nowrap">
-                Next Prayer
-              </div>
-              <div className="text-[clamp(14px,1.4vw,24px)] font-semibold tabular-nums whitespace-nowrap">
-                <span className="text-amber-700">{nextLabel}</span> &bull; {formatTime(next.at)} &bull; {countdown}
-              </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[clamp(11px,1vw,16px)] opacity-50">Next Prayer</span>
+              <span className="text-[clamp(14px,1.4vw,24px)] font-semibold tabular-nums">
+                <span className="text-amber-700">{nextLabel}</span>
+                &nbsp;&bull;&nbsp;{formatTime(next.at)}&nbsp;&bull;&nbsp;{countdown}
+              </span>
             </div>
           </div>
         </footer>
+
       </div>
     </main>
   );

@@ -222,9 +222,8 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
       <div className="manuscript-container">
         
         {/* Header */}
-        <header className="manuscript-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <img src="/logo.svg" alt="Islamic Center of Hattiesburg Logo" style={{ maxWidth: '280px', height: 'auto', marginBottom: '0.5rem' }} />
-          <p className="manuscript-subtitle">Prayer Times Portal</p>
+        <header className="manuscript-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', borderBottom: 'none' }}>
+          <img src="/logo.png" alt="Islamic Center of Hattiesburg Logo" style={{ maxWidth: '100%', height: 'auto' }} />
         </header>
 
         {/* Banners */}

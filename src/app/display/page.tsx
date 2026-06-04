@@ -325,35 +325,39 @@ export default function DisplayPage() {
           <DonationTile />
         </section>
 
-        {/* Floating Quran Ayah Bar */}
-        <div className="bg-white/90 backdrop-blur-md shadow-sm border border-black/10 rounded-2xl px-6 py-3 text-center transition-opacity duration-500 mx-auto w-full max-w-5xl" style={{ opacity: ayahFading ? 0 : 1 }}>
-          <div className="flex flex-col items-center">
-            <span className="font-arabic text-xl md:text-2xl mb-1 text-[#2b2216]">{currentAyah.arabic}</span>
-            <span className="italic text-sm md:text-base text-[#2b2216]/80">&ldquo;{currentAyah.english}&rdquo;</span>
-            <span className="text-xs text-[#8b1e0b] mt-1">[{currentAyah.ref}]</span>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <footer className="rounded-2xl bg-white shadow-sm border border-black/10 flex items-center justify-between px-6 py-3 shrink-0">
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="text-[clamp(14px,1.4vw,24px)] text-amber-700">&#9774;</span>
-            <div className="text-[clamp(14px,1.4vw,26px)]">
-              Jumu&apos;ah:{" "}
-              <span className="font-semibold text-amber-800 whitespace-nowrap">
-                1st &mdash; {fmt12From24(jummah1Time)}
-                &nbsp;&nbsp;&bull;&nbsp;&nbsp;
-                2nd &mdash; {fmt12From24(jummah2Time)}
-              </span>
+        {/* Footer with Integrated Verse */}
+        <footer className="rounded-2xl bg-white shadow-sm border border-black/10 flex flex-col justify-center px-6 py-4 shrink-0 gap-4 mt-auto">
+          {/* Verse */}
+          <div className="text-center transition-opacity duration-500 w-full" style={{ opacity: ayahFading ? 0 : 1 }}>
+            <div className="flex flex-col items-center">
+              <span className="font-arabic text-xl md:text-2xl mb-1 text-[#2b2216]">{currentAyah.arabic}</span>
+              <span className="italic text-sm md:text-base text-[#2b2216]/80">&ldquo;{currentAyah.english}&rdquo;</span>
+              <span className="text-xs text-[#8b1e0b] mt-1">[{currentAyah.ref}]</span>
             </div>
           </div>
 
-          <div className="text-right shrink-0">
-            <div className="text-[clamp(11px,1vw,16px)] opacity-50">
-              Next Prayer
+          <div className="w-full h-px bg-black/5" />
+
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="text-[clamp(14px,1.4vw,24px)] text-amber-700">&#9774;</span>
+              <div className="text-[clamp(14px,1.4vw,26px)]">
+                Jumu&apos;ah:{" "}
+                <span className="font-semibold text-amber-800 whitespace-nowrap">
+                  1st &mdash; {fmt12From24(jummah1Time)}
+                  &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+                  2nd &mdash; {fmt12From24(jummah2Time)}
+                </span>
+              </div>
             </div>
-            <div className="text-[clamp(14px,1.4vw,24px)] font-semibold tabular-nums whitespace-nowrap">
-              <span className="text-amber-700">{nextLabel}</span> &bull; {formatTime(next.at)} &bull; {countdown}
+
+            <div className="text-right shrink-0 flex items-center gap-3">
+              <div className="text-[clamp(11px,1vw,16px)] opacity-50 whitespace-nowrap">
+                Next Prayer
+              </div>
+              <div className="text-[clamp(14px,1.4vw,24px)] font-semibold tabular-nums whitespace-nowrap">
+                <span className="text-amber-700">{nextLabel}</span> &bull; {formatTime(next.at)} &bull; {countdown}
+              </div>
             </div>
           </div>
         </footer>
@@ -393,14 +397,14 @@ function JummahTile({
 
       <div className="relative z-10 mt-3 space-y-2">
         <div className="flex items-center justify-between">
-          <span className="font-medium text-amber-900/60 text-[clamp(14px,1.3vw,24px)]">1st Jummah</span>
-          <span className="font-semibold tabular-nums text-[clamp(20px,2.2vw,48px)] leading-none text-amber-800">
+          <span className="font-medium text-amber-900/60 text-[clamp(14px,1.3vw,24px)] whitespace-nowrap">1st Jummah</span>
+          <span className="font-semibold tabular-nums text-[clamp(20px,2.2vw,48px)] leading-none text-amber-800 whitespace-nowrap">
             {jummah1}
           </span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="font-medium text-amber-900/60 text-[clamp(14px,1.3vw,24px)]">2nd Jummah</span>
-          <span className="font-semibold tabular-nums text-[clamp(20px,2.2vw,48px)] leading-none text-amber-800">
+        <div className="flex items-center justify-between mt-1">
+          <span className="font-medium text-amber-900/60 text-[clamp(14px,1.3vw,24px)] whitespace-nowrap">2nd Jummah</span>
+          <span className="font-semibold tabular-nums text-[clamp(20px,2.2vw,48px)] leading-none text-amber-800 whitespace-nowrap">
             {jummah2}
           </span>
         </div>

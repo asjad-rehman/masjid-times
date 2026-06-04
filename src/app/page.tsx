@@ -40,92 +40,95 @@ export default async function Home() {
     { key: "isha",    label: "Isha",    adhan: fmtTime(adhan.isha),    jamaat: jamaat.isha },
   ];
 
-  const allJummah = [
-    ...(jamaat.jummah ?? []),
-    ...(jamaat.jummah2 ?? []),
-  ];
+  const jummahSlots = jamaat.jummah ?? [];
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      {/* Ambient background glows */}
+    <main className="min-h-screen text-slate-100" style={{ background: "linear-gradient(160deg, #1a2236 0%, #1e2a3a 40%, #1a2830 100%)" }}>
+      {/* Ambient glows */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden>
-        <div className="absolute -top-64 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-emerald-600/5 blur-[120px]" />
-        <div className="absolute top-1/2 right-0 h-96 w-96 -translate-y-1/2 rounded-full bg-emerald-600/4 blur-[80px]" />
+        <div className="absolute -top-40 left-1/2 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-emerald-500/8 blur-[100px]" />
+        <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-teal-500/6 blur-[80px]" />
+        <div className="absolute top-1/2 left-0 h-64 w-64 rounded-full bg-amber-500/4 blur-[80px]" />
       </div>
 
       <div className="relative mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10 md:px-8 md:py-12">
 
-        {/* ── Hero Section ── */}
-        <section className="mb-8 flex flex-col items-center text-center gap-3 sm:mb-10 sm:gap-4">
+        {/* ── Hero ── */}
+        <section className="mb-10 flex flex-col items-center text-center gap-4">
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
-            <img src="/logo.svg" alt="Logo" className="h-12 w-12 rounded-xl bg-white p-1 shadow" />
-            <span className="text-2xl font-extrabold tracking-tight text-emerald-200 drop-shadow sm:text-3xl">{masjid.name}</span>
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 p-2 ring-1 ring-white/20 shadow-lg">
+              <img src="/logo.svg" alt="Logo" className="h-full w-full" />
+            </div>
+            <span className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">{masjid.name}</span>
           </div>
-          <p className="max-w-xs text-sm text-white/70 sm:max-w-xl sm:text-base">
-            Welcome to the {masjid.name}! View today’s prayer times, Jumu’ah schedule, and more. Stay connected with your masjid community.
+          <p className="max-w-sm text-sm text-slate-300 sm:max-w-xl sm:text-base">
+            View today&apos;s prayer times, Jumu&apos;ah schedule, and more. Stay connected with your masjid community.
           </p>
-          <div className="flex flex-wrap justify-center gap-3 mt-2 w-full sm:w-auto">
-            <a href="/display" className="rounded-xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white/80 hover:bg-white/20 transition w-full sm:w-auto text-center">TV Display</a>
-            <a href="/api/ical" download="prayer-times.ics" className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-colors w-full sm:w-auto text-center">Export iCal</a>
-            <a href="#donate" className="rounded-xl border border-amber-400/40 bg-amber-400/10 px-5 py-2.5 text-sm font-semibold text-amber-200 hover:bg-amber-400/20 transition-colors w-full sm:w-auto text-center">Donate</a>
+          <div className="flex flex-wrap justify-center gap-3 w-full sm:w-auto">
+            <a href="/display" className="rounded-xl border border-slate-500/40 bg-slate-700/50 px-5 py-2.5 text-sm font-semibold text-slate-200 hover:bg-slate-600/50 transition w-full sm:w-auto text-center">
+              TV Display
+            </a>
+            <a href="/api/ical" download="prayer-times.ics" className="rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-5 py-2.5 text-sm font-semibold text-emerald-300 hover:bg-emerald-600/30 transition w-full sm:w-auto text-center">
+              Export iCal
+            </a>
+            <a href="#donate" className="rounded-xl border border-amber-400/40 bg-amber-500/15 px-5 py-2.5 text-sm font-semibold text-amber-200 hover:bg-amber-500/25 transition w-full sm:w-auto text-center">
+              Donate
+            </a>
           </div>
         </section>
 
-        {/* ── Header ── */}
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-center gap-4">
-            {/* Logo */}
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white p-2 shadow-lg">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.svg" alt="" width={44} height={44} className="h-full w-full" />
-            </div>
-
-            <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                Live Adhan + Jamaat
+        {/* ── Header card ── */}
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 sm:p-6 backdrop-blur-sm mb-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/15 p-2 ring-1 ring-emerald-500/25">
+                <img src="/logo.svg" alt="" width={44} height={44} className="h-full w-full" />
               </div>
-              <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
-                {masjid.name}
-              </h1>
-              <p className="mt-1 text-xs text-white/50">
-                {masjid.calc.method.replaceAll("_", " ")} &middot; {masjid.calc.fajrAngle}&deg;/{masjid.calc.ishaAngle}&deg; &middot; Hanafi Asr
-              </p>
+              <div>
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+                  Live Adhan &amp; Jamaat
+                </div>
+                <h1 className="mt-1.5 text-xl font-bold tracking-tight text-white sm:text-2xl">
+                  {masjid.name}
+                </h1>
+                <p className="mt-0.5 text-xs text-slate-400">
+                  {masjid.calc.method.replaceAll("_", " ")} &middot; {masjid.calc.fajrAngle}&deg;/{masjid.calc.ishaAngle}&deg; &middot; Hanafi Asr
+                </p>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 sm:text-right">
+              <div className="text-xs font-semibold uppercase tracking-widest text-slate-400">Today</div>
+              <div className="mt-1 text-sm font-semibold text-white">{today}</div>
+              <div className="mt-0.5 text-xs text-slate-400">{masjid.timezone}</div>
             </div>
           </div>
-
-          {/* Date card */}
-          <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 px-5 py-4 sm:text-right mt-4 sm:mt-0">
-            <div className="text-xs font-semibold uppercase tracking-widest text-white/50">Today</div>
-            <div className="mt-1 text-base font-semibold">{today}</div>
-            <div className="mt-0.5 text-xs text-white/50">{masjid.timezone}</div>
-          </div>
-        </header>
+        </div>
 
         {/* ── Sunrise strip ── */}
-        <div className="mt-8 flex items-center gap-3 rounded-2xl border border-amber-400/25 bg-amber-400/5 px-5 py-3.5">
-          <span className="text-sm font-semibold uppercase tracking-widest text-amber-300/80">Sunrise</span>
-          <span className="ml-auto text-sm font-semibold tabular-nums text-amber-200/80">
+        <div className="mb-4 flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-400/8 px-5 py-3">
+          <span className="text-sm font-semibold tracking-wide text-amber-300">🌅 Sunrise</span>
+          <span className="ml-auto text-sm font-bold tabular-nums text-amber-200">
             {fmtTime(adhan.sunrise)}
           </span>
         </div>
 
         {/* ── Main grid ── */}
-        <div className="mt-4 grid gap-4 md:grid-cols-1 lg:grid-cols-[1fr_300px]">
+        <div className="grid gap-4 lg:grid-cols-[1fr_300px]">
 
           {/* Prayer times */}
-          <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+          <section className="rounded-3xl border border-white/10 bg-white/5 p-5 sm:p-6 backdrop-blur-sm">
             <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-white/60">
+              <h2 className="text-sm font-bold uppercase tracking-widest text-slate-300">
                 Today&apos;s Prayer Times
               </h2>
-              <div className="flex gap-5 text-xs font-semibold uppercase tracking-widest text-white/40">
+              <div className="flex gap-5 text-xs font-semibold uppercase tracking-widest text-slate-500">
                 <span>Adhan</span>
                 <span>Jamaat</span>
               </div>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {prayers.map((p) => (
                 <PrayerRow
                   key={p.key}
@@ -142,32 +145,32 @@ export default async function Home() {
           <aside className="flex flex-col gap-4">
 
             {/* Jummah schedule */}
-            <section className="rounded-3xl border border-amber-400/15 bg-amber-400/[0.04] p-5">
-              <h3 className="text-sm font-semibold uppercase tracking-widest text-amber-300/80">
+            <section className="rounded-3xl border border-amber-400/20 bg-amber-400/[0.06] p-5 backdrop-blur-sm">
+              <h3 className="text-sm font-bold uppercase tracking-widest text-amber-200">
                 Jumu&apos;ah Schedule
               </h3>
 
               <div className="mt-4 space-y-3">
-                {allJummah.length === 0 ? (
-                  <p className="text-sm text-white/30">No schedule set.</p>
+                {jummahSlots.length === 0 ? (
+                  <p className="text-sm text-slate-400">No schedule set.</p>
                 ) : (
-                  allJummah.map((slot, i) => (
+                  jummahSlots.map((slot, i) => (
                     <div
                       key={i}
-                      className="rounded-2xl border border-white/8 bg-black/20 p-4"
+                      className="rounded-2xl border border-white/10 bg-white/5 p-4"
                     >
-                      {allJummah.length > 1 && (
-                        <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-white/50">
+                      {jummahSlots.length > 1 && (
+                        <div className="mb-3 text-xs font-bold uppercase tracking-widest text-amber-300/70">
                           {i === 0 ? "1st" : i === 1 ? "2nd" : `${i + 1}th`} Jumu&apos;ah
                         </div>
                       )}
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-white/50">Khutbah</span>
-                        <span className="text-sm font-semibold tabular-nums">{slot.khutbah || "—"}</span>
+                        <span className="text-sm text-slate-400">Khutbah</span>
+                        <span className="text-sm font-semibold tabular-nums text-slate-200">{slot.khutbah || "—"}</span>
                       </div>
                       <div className="mt-2.5 flex items-center justify-between">
-                        <span className="text-sm text-white/50">Salah</span>
-                        <span className="text-sm font-semibold tabular-nums text-emerald-300">{slot.salah || "—"}</span>
+                        <span className="text-sm text-slate-400">Salah</span>
+                        <span className="text-sm font-bold tabular-nums text-emerald-300">{slot.salah || "—"}</span>
                       </div>
                     </div>
                   ))
@@ -178,51 +181,51 @@ export default async function Home() {
             {/* TV display link */}
             <a
               href="/display"
-              className="group flex items-center gap-3 rounded-3xl border border-white/10 bg-white/[0.03] px-5 py-4 transition-colors hover:bg-white/[0.06]"
+              className="group flex items-center gap-3 rounded-3xl border border-white/10 bg-white/5 px-5 py-4 transition hover:bg-white/8 backdrop-blur-sm"
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-white/50">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-slate-700/60">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-slate-300">
                   <rect x="2" y="3" width="20" height="14" rx="2" />
                   <path d="M8 21h8M12 17v4" />
                 </svg>
               </div>
               <div className="min-w-0">
-                <div className="text-sm font-semibold text-white/75">TV Display Mode</div>
-                <div className="text-xs text-white/35">Full-screen kiosk view</div>
+                <div className="text-sm font-semibold text-slate-200">TV Display Mode</div>
+                <div className="text-xs text-slate-400">Full-screen kiosk view</div>
               </div>
-              <span className="ml-auto text-sm text-white/20 transition-transform group-hover:translate-x-0.5">&rarr;</span>
+              <span className="ml-auto text-slate-400 transition-transform group-hover:translate-x-0.5">&rarr;</span>
             </a>
 
           </aside>
         </div>
 
         {/* ── Donate Section ── */}
-        <section id="donate" className="mt-10 flex flex-col items-center gap-3 rounded-3xl border border-emerald-500/10 bg-emerald-500/5 px-3 py-6 text-center sm:mt-12 sm:gap-4 sm:px-6 sm:py-8">
-          <h2 className="text-base font-bold text-emerald-200 flex items-center gap-2 sm:text-lg">
+        <section id="donate" className="mt-10 flex flex-col items-center gap-4 rounded-3xl border border-emerald-500/20 bg-emerald-500/8 px-4 py-8 text-center sm:px-8 backdrop-blur-sm">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3 0 1.657 1.343 3 3 3s3-1.343 3-3c0-1.657-1.343-3-3-3zm0 0V4m0 16v-4m8-4h-4m-8 0H4" /></svg>
             Support Your Masjid
           </h2>
-          <p className="text-white/60 max-w-xs text-sm sm:max-w-md sm:text-base">Help us maintain and grow our community. Every donation makes a difference!</p>
-          <img src="/donation-qr.png" alt="Donation QR" className="h-32 w-32 rounded-xl border border-white/10 bg-white/10 p-2 shadow sm:h-36 sm:w-36" />
-          <div className="text-xs text-white/30">Scan to donate</div>
+          <p className="text-slate-300 max-w-xs text-sm sm:max-w-md">Help us maintain and grow our community. Every donation makes a difference!</p>
+          <img src="/donation-qr.png" alt="Donation QR" className="h-36 w-36 rounded-xl border border-white/15 bg-white p-2 shadow-lg" />
+          <div className="text-xs text-slate-400">Scan to donate</div>
         </section>
 
         {/* ── Footer ── */}
-        <footer className="mt-8 flex flex-col items-center gap-3 border-t border-white/10 pt-5 text-center sm:mt-10 sm:pt-6">
+        <footer className="mt-8 flex flex-col items-center gap-3 border-t border-white/10 pt-6 text-center sm:mt-10">
           <div className="flex flex-col gap-2 items-center justify-center sm:flex-row sm:gap-3">
-            <span className="text-xs text-white/40">
+            <span className="text-xs text-slate-400">
               &copy; {new Date().getFullYear()} {masjid.name} &middot; Times shown in {masjid.timezone}
             </span>
-            <span className="hidden sm:inline text-xs text-white/25 mx-1">|</span>
+            <span className="hidden sm:inline text-slate-600 mx-1">|</span>
             <a
               href="/admin"
-              className="rounded-lg border border-white/20 bg-white/5 px-4 py-1.5 text-sm font-medium text-white/50 transition-colors hover:bg-white/10 hover:text-white/80"
+              className="rounded-lg border border-slate-600/50 bg-slate-700/40 px-4 py-1.5 text-sm font-medium text-slate-300 transition hover:bg-slate-600/50 hover:text-white"
             >
               Admin
             </a>
           </div>
-          <div className="mt-1 text-xs text-white/35">
-            <span>Location: {masjid.coordinates.lat}, {masjid.coordinates.lon}</span>
+          <div className="text-xs text-slate-500">
+            Location: {masjid.coordinates.lat}, {masjid.coordinates.lon}
           </div>
         </footer>
 
@@ -242,26 +245,23 @@ function PrayerRow(props: {
   const isNext = props.isNext;
   return (
     <div
-      className={["flex flex-row items-center rounded-2xl border px-4 py-3.5",
+      className={[
+        "flex flex-row items-center rounded-2xl border px-4 py-3.5 transition",
         isNext
-          ? "border-emerald-500/30 bg-emerald-500/[0.08] shadow-[0_0_24px_rgba(16,185,129,0.06)]"
-          : "border-white/10 bg-black/15",
+          ? "border-emerald-400/35 bg-emerald-500/12 shadow-[0_0_20px_rgba(16,185,129,0.10)]"
+          : "border-white/8 bg-white/4 hover:bg-white/6",
       ].join(" ")}
     >
       {/* Label */}
-      <div className="flex min-w-0 flex-1 items-center gap-2">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5">
         {isNext && (
-          <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
+          <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-400" />
         )}
-        <span
-          className={`text-base font-semibold ${
-            isNext ? "text-emerald-200" : "text-white/80"
-          }`}
-        >
+        <span className={`text-base font-semibold ${isNext ? "text-emerald-200" : "text-slate-200"}`}>
           {props.label}
         </span>
         {isNext && (
-          <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-400">
+          <span className="rounded-full border border-emerald-400/30 bg-emerald-400/15 px-2 py-0.5 text-xs font-semibold text-emerald-300">
             Next
           </span>
         )}
@@ -270,16 +270,12 @@ function PrayerRow(props: {
       {/* Times */}
       <div className="flex shrink-0 gap-6 sm:gap-10">
         <div className="w-[72px] text-right">
-          <div className="text-xs font-medium uppercase tracking-wider text-white/40">Adhan</div>
-          <div className="mt-0.5 text-sm font-semibold tabular-nums">{props.adhan}</div>
+          <div className="text-xs font-medium uppercase tracking-wider text-slate-500">Adhan</div>
+          <div className="mt-0.5 text-sm font-semibold tabular-nums text-slate-200">{props.adhan}</div>
         </div>
         <div className="w-[72px] text-right">
-          <div className="text-xs font-medium uppercase tracking-wider text-white/40">Jamaat</div>
-          <div
-            className={`mt-0.5 text-sm font-semibold tabular-nums ${
-              props.jamaat ? "text-emerald-300" : "text-white/30"
-            }`}
-          >
+          <div className="text-xs font-medium uppercase tracking-wider text-slate-500">Jamaat</div>
+          <div className={`mt-0.5 text-sm font-semibold tabular-nums ${props.jamaat ? "text-emerald-300" : "text-slate-500"}`}>
             {props.jamaat ?? "—"}
           </div>
         </div>

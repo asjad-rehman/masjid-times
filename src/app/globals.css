@@ -1,184 +1,267 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617; /* Deep slate / near black */
-  --foreground: #e2e8f0; /* Soft white */
-  --accent-gold: #fbbf24;
-  --accent-gold-dark: #b45309;
-  --accent-emerald: #10b981;
-  --accent-emerald-dark: #047857;
-  --glass-bg: rgba(15, 23, 42, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --glass-border-highlight: rgba(16, 185, 129, 0.2);
+  /* Traditional Manuscript Palette */
+  --background: #fdfbf7; /* Parchment cream */
+  --foreground: #2b2216; /* Deep sepia ink */
+  --border-ink: rgba(43, 34, 22, 0.15); /* Faint ink lines */
+  --accent-ink: #8b1e0b; /* Classic dark red/burgundy accent often used in old manuscripts */
+  --gold-leaf: #b8860b; /* Dark goldenrod */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Classic Times New Roman */
+  font-family: "Times New Roman", Times, serif;
   margin: 0;
   padding: 0;
+  /* Fluid typography baseline */
+  font-size: 16px;
+  line-height: 1.6;
 }
 
-/* ================= Premium Dark Theme ================= */
+/* ================= Traditional Theme ================= */
 
-.islamic-bg {
+.manuscript-bg {
   background-color: var(--background);
   position: relative;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* Dynamic Animated Mesh Gradient */
-.islamic-pattern-overlay {
+/* Faint Islamic Calligraphy / Geometric Watermark */
+.manuscript-watermark {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background:
-    radial-gradient(circle at 15% 50%, rgba(4, 120, 87, 0.15), transparent 25vw),
-    radial-gradient(circle at 85% 30%, rgba(180, 83, 9, 0.15), transparent 25vw);
-  animation: mesh-shift 20s ease-in-out infinite alternate;
+  opacity: 0.04;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 0L60 120M0 60L120 60M30 30L90 90M30 90L90 30' stroke='%232b2216' stroke-width='1' fill='none'/%3E%3Ccircle cx='60' cy='60' r='40' stroke='%232b2216' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-position: center;
 }
 
-@keyframes mesh-shift {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 100% 100%;
-  }
+/* ================= Traditional Layout Elements ================= */
+
+.manuscript-container {
+  /* Fluid container */
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  position: relative;
+  z-index: 10;
+  /* Ensure fluid transitions on layout */
+  transition: all 0.3s ease-in-out;
 }
 
-/* Geometric Islamic star pattern overlay - strictly sharp */
-.islamic-pattern-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.02;
-  background-image:
-    linear-gradient(45deg, var(--accent-emerald) 1px, transparent 1px),
-    linear-gradient(-45deg, var(--accent-gold) 1px, transparent 1px);
-  background-size: 60px 60px;
-  background-position: 0 0, 30px 30px;
-}
-
-/* ================= Glassmorphism & Sharp Architecture ================= */
-
-/* Sharp, brutalist glass panels */
-.islamic-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 0 !important; /* Strictly no rounded corners */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-}
-
-.islamic-tile {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 0 !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.manuscript-header {
+  text-align: center;
+  border-bottom: 2px solid var(--foreground);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
   position: relative;
 }
 
-.islamic-tile:hover {
-  background: rgba(30, 41, 59, 0.7);
-  border-color: rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
-}
-
-.islamic-tile-highlight {
-  background: rgba(4, 120, 87, 0.1);
-  border: 1px solid var(--glass-border-highlight);
-  border-left: 4px solid var(--accent-emerald);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 0 !important;
-  box-shadow: 
-    0 0 20px rgba(16, 185, 129, 0.05),
-    inset 0 0 10px rgba(16, 185, 129, 0.02);
-  transform: scale(1.02);
-  transform-origin: center left;
-  animation: subtle-pulse 3s infinite alternate;
-}
-
-@keyframes subtle-pulse {
-  0% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.05); }
-  100% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.15); }
-}
-
-.jummah-tile {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
-  border: 1px solid rgba(251, 191, 36, 0.15);
-  border-top: 3px solid var(--accent-gold-dark);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 0 !important;
-  position: relative;
-  overflow: hidden;
-}
-
-.jummah-tile::after {
+/* Classic double-line border common in old books */
+.manuscript-header::after {
   content: "";
   position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  background: linear-gradient(45deg, transparent 40%, rgba(251, 191, 36, 0.03) 50%, transparent 60%);
-  background-size: 200% 200%;
-  animation: shimmer 8s infinite linear;
-  pointer-events: none;
+  bottom: -6px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background-color: var(--border-ink);
 }
 
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.manuscript-title {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: normal;
+  letter-spacing: 0.02em;
+  margin: 0;
 }
 
-/* ================= Sharp UI Elements ================= */
+.manuscript-subtitle {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-style: italic;
+  color: var(--accent-ink);
+  margin-top: 0.5rem;
+}
 
-.sharp-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* ================= Prayer List ================= */
+
+.prayer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--border-ink);
+  border-bottom: 1px solid var(--border-ink);
+}
+
+.prayer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px dotted var(--border-ink);
+  /* Fluid hover transition */
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.prayer-row:last-child {
+  border-bottom: none;
+}
+
+.prayer-row:hover {
+  background-color: rgba(43, 34, 22, 0.03);
+}
+
+.prayer-row.is-next {
+  background-color: rgba(184, 134, 11, 0.08); /* Faint gold highlight */
+  border-left: 3px solid var(--gold-leaf);
+  padding-left: 1rem;
+}
+
+.prayer-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.prayer-times {
+  display: flex;
+  gap: 2rem;
+  text-align: right;
+}
+
+.time-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 4rem;
+}
+
+.time-label {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: rgba(43, 34, 22, 0.6);
+  margin-bottom: 0.2rem;
+}
+
+.time-value {
+  font-size: 1.15rem;
+}
+
+/* ================= Jumu'ah & Banners ================= */
+
+.jummah-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-ink);
+  background-color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+}
+
+.jummah-title {
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--accent-ink);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(139, 30, 11, 0.2);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.banner {
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border: 1px solid;
+  font-size: 0.9rem;
+}
+
+.banner-warning {
+  background-color: rgba(184, 134, 11, 0.1);
+  border-color: rgba(184, 134, 11, 0.3);
+  color: #6b4e00;
+}
+
+.banner-error {
+  background-color: rgba(139, 30, 11, 0.05);
+  border-color: rgba(139, 30, 11, 0.2);
+  color: var(--accent-ink);
+}
+
+/* ================= Controls & Footer ================= */
+
+.traditional-btn {
+  background: none;
+  border: 1px solid var(--border-ink);
   color: var(--foreground);
-  border-radius: 0 !important;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.75rem;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.sharp-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+.traditional-btn:hover {
+  background-color: rgba(43, 34, 22, 0.05);
+  border-color: var(--foreground);
 }
 
-/* ================= Quran Ayah Section ================= */
-
-.quran-container {
-  background: rgba(2, 6, 23, 0.8);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+.footer-links {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.85rem;
+  font-style: italic;
 }
 
-.quran-arabic {
-  font-family: "Traditional Arabic", "Scheherazade", "Amiri", serif;
-  color: #f8fafc;
+.footer-links a {
+  color: var(--foreground);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--accent-ink);
+}
+
+/* ================= Quran Verse ================= */
+
+.quran-traditional {
+  margin-top: 4rem;
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-ink);
+}
+
+.arabic-text {
+  font-family: "Traditional Arabic", "Amiri", "Scheherazade", serif;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
   direction: rtl;
   line-height: 1.8;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.english-translation {
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(43, 34, 22, 0.8);
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.verse-ref {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--accent-ink);
 }

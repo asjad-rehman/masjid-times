@@ -1,40 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" fill="none">
-  <!-- Crescent and Star -->
-  <g transform="translate(150, 28)">
-    <!-- Star -->
-    <polygon points="0,-10 2.9,-3.1 10,-3.1 4.5,1.7 6.9,8.5 0,4.5 -6.9,8.5 -4.5,1.7 -10,-3.1 -2.9,-3.1" fill="#1a7a6d"/>
-    <!-- Crescent -->
-    <path d="M-6,14 A8,8 0 1,1 6,14 A6,6 0 1,0 -6,14Z" fill="#1a7a6d"/>
-    <!-- Finial pole -->
-    <line x1="0" y1="20" x2="0" y2="36" stroke="#1a7a6d" stroke-width="2.5"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 460" fill="none">
 
-  <!-- Dome -->
-  <g transform="translate(150, 120)">
-    <!-- Main dome -->
-    <path d="M-55,30 Q-55,-55 0,-60 Q55,-55 55,30 Z" fill="#1a7a6d"/>
-    <!-- Dome highlight -->
-    <path d="M15,-45 Q40,-30 40,25" stroke="white" stroke-width="3" fill="none" opacity="0.3"/>
-    <!-- Lower dome section -->
-    <path d="M-65,30 Q-65,5 -55,0 L-55,30 Z" fill="#1a7a6d"/>
-    <path d="M55,0 Q65,5 65,30 L55,30 Z" fill="#1a7a6d"/>
-    <!-- Base curve -->
-    <ellipse cx="0" cy="32" rx="68" ry="8" fill="#1a7a6d"/>
-  </g>
+  <!-- ═══ Book / Wings ═══ -->
+  <!-- Left outer wing -->
+  <path d="M196,218 C170,205 120,188 70,190 C40,191 12,202 6,218 C2,228 10,238 30,234 C70,226 140,220 196,228 Z" fill="#2b7a6e"/>
+  <!-- Left inner wing (depth) -->
+  <path d="M196,228 C155,222 100,218 58,224 C38,227 22,233 24,242 C50,237 120,232 196,240 Z" fill="#2b7a6e"/>
 
-  <!-- Open Book -->
-  <g transform="translate(150, 175)">
-    <!-- Left page -->
-    <path d="M-8,0 Q-70,-5 -110,35 L-110,40 Q-70,5 -8,5 Z" fill="#1a7a6d"/>
-    <!-- Right page -->
-    <path d="M8,0 Q70,-5 110,35 L110,40 Q70,5 8,5 Z" fill="#1a7a6d"/>
-    <!-- Center spine highlight -->
-    <path d="M-8,0 L0,8 L8,0" fill="white" opacity="0.15"/>
-  </g>
+  <!-- Right outer wing -->
+  <path d="M204,218 C230,205 280,188 330,190 C360,191 388,202 394,218 C398,228 390,238 370,234 C330,226 260,220 204,228 Z" fill="#2b7a6e"/>
+  <!-- Right inner wing (depth) -->
+  <path d="M204,228 C245,222 300,218 342,224 C362,227 378,233 376,242 C350,237 280,232 204,240 Z" fill="#2b7a6e"/>
 
-  <!-- Text: ISLAMIC CENTER -->
-  <text x="150" y="248" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#1a7a6d" letter-spacing="4">ISLAMIC CENTER</text>
+  <!-- Centre V spine -->
+  <path d="M186,230 L200,250 L214,230 L210,226 L200,244 L190,226 Z" fill="#2b7a6e"/>
 
-  <!-- Text: OF HATTIESBURG -->
-  <text x="150" y="280" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#1a7a6d" letter-spacing="6">OF HATTIESBURG</text>
+  <!-- ═══ Mosque base / drum ═══ -->
+  <rect x="162" y="148" width="76" height="28" rx="3" fill="#2b7a6e"/>
+  <!-- Decorative band on drum -->
+  <rect x="160" y="144" width="80" height="8" rx="3" fill="#2b7a6e"/>
+
+  <!-- ═══ Main dome ═══ -->
+  <path d="M163,148 C163,148 148,130 148,108 C148,80 170,54 200,50 C230,54 252,80 252,108 C252,130 237,148 237,148 Z" fill="#2b7a6e"/>
+  <!-- Dome highlight arc -->
+  <path d="M218,65 C234,78 240,100 236,120" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.25"/>
+
+  <!-- ═══ Finial ═══ -->
+  <!-- Pole -->
+  <line x1="200" y1="50" x2="200" y2="28" stroke="#2b7a6e" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Crescent moon -->
+  <path d="M200,26 m-8,0 a8,8 0 1,1 16,0 a6,6 0 1,0 -16,0 Z" fill="#2b7a6e"/>
+
+  <!-- Star (5-pointed) above crescent -->
+  <polygon points="200,4 201.8,9.5 207.5,9.5 203,13 204.8,18.5 200,15.5 195.2,18.5 197,13 192.5,9.5 198.2,9.5" fill="#2b7a6e"/>
+
+  <!-- ═══ Text ═══ -->
+  <text x="200" y="296" text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="30" font-weight="700"
+    fill="#1a2a28"
+    letter-spacing="3">ISLAMIC CENTER</text>
+
+  <text x="200" y="330" text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="20"
+    fill="#2b7a6e"
+    letter-spacing="5">OF HATTIESBURG</text>
+
 </svg>

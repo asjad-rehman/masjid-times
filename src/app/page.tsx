@@ -56,7 +56,7 @@ export default async function Home() {
         {/* ── Hero ── */}
         <section className="mb-10 flex flex-col items-center text-center gap-4">
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 p-2 ring-1 ring-white/20 shadow-lg">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white p-1.5 shadow-lg">
               <img src="/logo.svg" alt="Logo" className="h-full w-full" />
             </div>
             <span className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">{masjid.name}</span>
@@ -81,7 +81,7 @@ export default async function Home() {
         <div className="rounded-3xl border border-white/10 bg-white/5 p-5 sm:p-6 backdrop-blur-sm mb-4">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/15 p-2 ring-1 ring-emerald-500/25">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white p-1.5 shadow-md">
                 <img src="/logo.svg" alt="" width={44} height={44} className="h-full w-full" />
               </div>
               <div>

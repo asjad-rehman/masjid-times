@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { getAdhanTimes } from "@/lib/prayer";
-import { getJamaatTimes } from "@/lib/db";
+import { getJamaatTimes, type Jamaat, type JummahSlot } from "@/lib/db";
 import { masjid } from "@/config/masjid";
 
 function pad(n: number) {
@@ -21,7 +21,7 @@ function formatICSDate(date: Date) {
   );
 }
 
-function buildPrayerEvents(startDate: Date, days: number, jamaat: any) {
+function buildPrayerEvents(startDate: Date, days: number, jamaat: Jamaat) {
   const events: string[] = [];
   for (let i = 0; i < days; i++) {
     const date = new Date(startDate);
@@ -47,7 +47,7 @@ function buildPrayerEvents(startDate: Date, days: number, jamaat: any) {
     }
     // Jumu'ah slots
     if (jamaat.jummah && Array.isArray(jamaat.jummah)) {
-      jamaat.jummah.forEach((slot: any, idx: number) => {
+      jamaat.jummah.forEach((slot: JummahSlot, idx: number) => {
         if (slot.khutbah && /^\d{1,2}:\d{2}$/.test(slot.khutbah)) {
           const [h, m] = slot.khutbah.split(":").map(Number);
           const khutbahDate = new Date(date);

@@ -85,9 +85,11 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
   const [verseIndex, setVerseIndex] = useState(0);
   const [verseFading, setVerseFading] = useState(false);
   const [apiError, setApiError] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Live clock interval
   useEffect(() => {
+    setMounted(true);
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
@@ -220,9 +222,9 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
       <div className="manuscript-container">
         
         {/* Header */}
-        <header className="manuscript-header">
-          <h1 className="manuscript-title">{masjid.name}</h1>
-          <p className="manuscript-subtitle">Prayer Times</p>
+        <header className="manuscript-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <img src="/logo.svg" alt="Islamic Center of Hattiesburg Logo" style={{ maxWidth: '280px', height: 'auto', marginBottom: '0.5rem' }} />
+          <p className="manuscript-subtitle">Prayer Times Portal</p>
         </header>
 
         {/* Banners */}
@@ -241,15 +243,15 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
         {/* Date & Time Header Row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <div>
-            <div style={{ fontSize: '1.1rem' }}>{todayString}</div>
-            <div style={{ fontSize: '0.9rem', fontStyle: 'italic', opacity: 0.8 }}>
-              {new Intl.DateTimeFormat("en-US", {
+            <div style={{ fontSize: '1.1rem' }} suppressHydrationWarning>{mounted ? todayString : "Loading..."}</div>
+            <div style={{ fontSize: '0.9rem', fontStyle: 'italic', opacity: 0.8 }} suppressHydrationWarning>
+              {mounted ? new Intl.DateTimeFormat("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit",
                 hour12: !use24Hour,
                 timeZone: masjid.timezone,
-              }).format(now)}
+              }).format(now) : "--:--:--"}
             </div>
           </div>
           <button onClick={() => setUse24Hour(!use24Hour)} className="traditional-btn">
@@ -258,8 +260,12 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
         </div>
 
         {/* Next Prayer Highlight (Subtle) */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem', fontStyle: 'italic' }}>
-          Next: <strong>{next.label}</strong> at {formatDateObj(next.at)} (in {countdown})
+        <div style={{ textAlign: 'center', marginBottom: '2rem', fontStyle: 'italic' }} suppressHydrationWarning>
+          {mounted ? (
+            <>Next: <strong>{next.label}</strong> at {formatDateObj(next.at)} (in {countdown})</>
+          ) : (
+            <>Calculating next prayer...</>
+          )}
         </div>
 
         {/* Prayer List */}
@@ -288,7 +294,7 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
 
         {/* Jumu'ah */}
         <div className="jummah-section">
-          <div className="jummah-title">Jumu'ah Schedule</div>
+          <div className="jummah-title">Jumu&apos;ah Schedule</div>
           {jummahSlots.length === 0 ? (
             <p style={{ fontStyle: 'italic', opacity: 0.7 }}>No schedule available.</p>
           ) : (
@@ -309,7 +315,7 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
         {/* Rotating Quran Verse */}
         <div className="quran-traditional" style={{ opacity: verseFading ? 0 : 1, transition: 'opacity 0.6s ease' }}>
           <div className="arabic-text">{currentVerse.arabic}</div>
-          <div className="english-translation">"{currentVerse.english}"</div>
+          <div className="english-translation">&quot;{currentVerse.english}&quot;</div>
           <div className="verse-ref">{currentVerse.ref}</div>
         </div>
 

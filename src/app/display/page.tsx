@@ -208,7 +208,6 @@ export default function DisplayPage() {
   }, []);
 
   // Calculations based on current time
-  const nowTz = useMemo(() => now ? nowInMasjidTZ(now, masjid.timezone) : nowInMasjidTZ(new Date(), masjid.timezone), [now]);
   const todayTz = useMemo(() => now ? todayInMasjidTZ(now, masjid.timezone) : todayInMasjidTZ(new Date(), masjid.timezone), [now]);
   const tomorrowTz = useMemo(() => addDays(todayTz, 1), [todayTz]);
 

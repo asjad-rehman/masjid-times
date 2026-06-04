@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Coordinates, CalculationMethod, Madhab, PrayerTimes } from "adhan";
 import { masjid } from "@/config/masjid";
-import { fmt12From24, fmtDateTime12 } from "@/lib/time";
+import { fmt12From24, fmtDateTime12, zonedParts, nowInMasjidTZ, todayInMasjidTZ, addDays, msToHMS } from "@/lib/time";
 import Image from "next/image";
 
 /* ================= Types ================= */
@@ -55,45 +55,6 @@ const FALLBACK: Jamaat = {
 
 /* ================= Timezone helpers ================= */
 
-function zonedParts(date: Date, timeZone: string) {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  }).formatToParts(date);
-
-  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value ?? 0);
-
-  return {
-    year: get("year"),
-    month: get("month"),
-    day: get("day"),
-    hour: get("hour"),
-    minute: get("minute"),
-    second: get("second"),
-  };
-}
-
-function nowInMasjidTZ(now: Date) {
-  const p = zonedParts(now, masjid.timezone);
-  return new Date(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
-}
-
-function todayInMasjidTZ(now: Date) {
-  const p = zonedParts(now, masjid.timezone);
-  return new Date(p.year, p.month - 1, p.day);
-}
-
-function addDays(d: Date, days: number) {
-  const x = new Date(d);
-  x.setDate(x.getDate() + days);
-  return x;
-}
 
 function isFriday(now: Date): boolean {
   const p = zonedParts(now, masjid.timezone);
@@ -169,15 +130,6 @@ function getNextPrayerInfo(
   return { key: "fajr", at: tomorrowTimes.fajr };
 }
 
-function msToHMS(ms: number) {
-  const total = Math.max(0, Math.floor(ms / 1000));
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
-}
 
 function isValidJamaat(x: unknown): x is Jamaat {
   if (!x || typeof x !== "object") return false;
@@ -256,8 +208,8 @@ export default function DisplayPage() {
   }, []);
 
   // Calculations based on current time
-  const nowTz = useMemo(() => now ? nowInMasjidTZ(now) : nowInMasjidTZ(new Date()), [now]);
-  const todayTz = useMemo(() => now ? todayInMasjidTZ(now) : todayInMasjidTZ(new Date()), [now]);
+  const nowTz = useMemo(() => now ? nowInMasjidTZ(now, masjid.timezone) : nowInMasjidTZ(new Date(), masjid.timezone), [now]);
+  const todayTz = useMemo(() => now ? todayInMasjidTZ(now, masjid.timezone) : todayInMasjidTZ(new Date(), masjid.timezone), [now]);
   const tomorrowTz = useMemo(() => addDays(todayTz, 1), [todayTz]);
 
   const adhanToday = useMemo(() => calculateAdhanTimes(todayTz), [todayTz]);

@@ -252,9 +252,7 @@ export default function DisplayPage() {
   const currentAyah = QURAN_AYAHS[ayahIndex];
 
   return (
-    <main className="h-screen w-screen overflow-hidden islamic-bg text-[#1a1a2e] flex flex-col">
-      {/* Decorative Islamic pattern overlay */}
-      <div className="islamic-pattern-overlay" />
+    <main className="h-screen w-screen overflow-hidden bg-[#fdfbf7] text-[#1a1a2e] flex flex-col font-serif">
 
       <div
         className={[
@@ -265,7 +263,7 @@ export default function DisplayPage() {
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Image
-              src="/logo.svg"
+              src="/logo.png"
               alt={masjid.name}
               width={80}
               height={80}
@@ -287,7 +285,7 @@ export default function DisplayPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl islamic-card px-6 py-4 text-center">
+          <div className="rounded-2xl bg-white shadow-sm border border-black/10 px-6 py-4 text-center">
             <div className="font-semibold tabular-nums text-[clamp(26px,2.8vw,52px)]">
               {clock}
             </div>
@@ -338,7 +336,7 @@ export default function DisplayPage() {
         </section>
 
         {/* Footer */}
-        <footer className="rounded-2xl islamic-card flex items-center justify-between px-6 py-3">
+        <footer className="rounded-2xl bg-white shadow-sm border border-black/10 flex items-center justify-between px-6 py-3">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-[clamp(14px,1.4vw,24px)] text-amber-700">&#9774;</span>
             <div className="text-[clamp(14px,1.4vw,26px)]">
@@ -363,13 +361,11 @@ export default function DisplayPage() {
       </div>
 
       {/* Floating Quran Ayah Bar */}
-      <div className="quran-bar relative z-10">
-        <div className={`quran-ayah-content ${ayahFading ? "quran-ayah-fade-out" : "quran-ayah-fade-in"}`}>
-          <span className="quran-bismillah-icon">&#xFDFD;</span>
-          <span className="quran-arabic">{currentAyah.arabic}</span>
-          <span className="quran-separator">|</span>
-          <span className="quran-english">&ldquo;{currentAyah.english}&rdquo;</span>
-          <span className="quran-ref">[{currentAyah.ref}]</span>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md shadow-lg border border-black/10 rounded-2xl px-6 py-4 text-center w-[90%] max-w-4xl z-10 transition-opacity duration-500" style={{ opacity: ayahFading ? 0 : 1 }}>
+        <div className="flex flex-col items-center">
+          <span className="font-arabic text-2xl md:text-3xl mb-2 text-[#2b2216]">{currentAyah.arabic}</span>
+          <span className="italic text-[#2b2216]/80">&ldquo;{currentAyah.english}&rdquo;</span>
+          <span className="text-xs text-[#8b1e0b] mt-1">[{currentAyah.ref}]</span>
         </div>
       </div>
     </main>
@@ -392,10 +388,10 @@ function JummahTile({
   return (
     <div
       className={[
-        "rounded-2xl border p-5 flex flex-col justify-center min-h-0 transition-transform duration-300",
+        "rounded-2xl border p-5 flex flex-col justify-center min-h-0 transition-all duration-300",
         highlight
-          ? "jummah-tile-highlight scale-[1.01]"
-          : "jummah-tile",
+          ? "bg-[#b8860b]/10 border-[#b8860b] shadow-md scale-[1.01]"
+          : "bg-white border-black/10 shadow-sm",
       ].join(" ")}
     >
       <div className="relative z-10 flex items-center gap-2">
@@ -431,7 +427,7 @@ function JummahTile({
 
 function DonationTile() {
   return (
-    <div className="rounded-2xl border p-5 flex flex-col items-center justify-center min-h-0 islamic-tile">
+    <div className="rounded-2xl border border-black/10 bg-white shadow-sm p-5 flex flex-col items-center justify-center min-h-0">
       <div className="font-semibold text-emerald-800 text-[clamp(16px,1.4vw,28px)]">
         Support Your Masjid
       </div>
@@ -473,10 +469,10 @@ function Tile({
   return (
     <div
       className={[
-        "rounded-2xl border p-6 flex flex-col justify-center min-h-0 transition-transform duration-300",
+        "rounded-2xl border p-6 flex flex-col justify-center min-h-0 transition-all duration-300",
         highlight
-          ? "islamic-tile-highlight scale-[1.01]"
-          : "islamic-tile",
+          ? "bg-[#b8860b]/10 border-[#b8860b] shadow-md scale-[1.01]"
+          : "bg-white border-black/10 shadow-sm",
       ].join(" ")}
     >
       <div className="flex items-center gap-3">

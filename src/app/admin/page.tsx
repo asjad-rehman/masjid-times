@@ -165,13 +165,12 @@ export default function AdminPage() {
 
   if (!loggedIn) {
     return (
-      <main className="min-h-screen islamic-bg text-[#1a1a2e]">
-        <div className="islamic-pattern-overlay" />
+      <main className="min-h-screen bg-[#fdfbf7] text-[#1a1a2e]">
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
           <div className="w-full max-w-md space-y-6">
             <div className="text-center">
               <Image
-                src="/logo.svg"
+                src="/logo.png"
                 alt={masjid.name}
                 width={80}
                 height={80}
@@ -181,7 +180,7 @@ export default function AdminPage() {
               <h1 className="mt-4 text-2xl font-bold">{masjid.name}</h1>
               <p className="mt-1 text-[#1a1a2e]/60 text-sm">Admin Panel</p>
             </div>
-            <div className="rounded-2xl islamic-card p-6 space-y-4">
+            <div className="rounded-2xl bg-white shadow-sm border border-black/10 p-6 space-y-4">
               <input
                 type="password"
                 className="w-full p-3 bg-[#1a1a2e]/5 border border-[#1a1a2e]/10 rounded-xl outline-none focus:border-emerald-500/50 transition-colors"
@@ -212,15 +211,14 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen islamic-bg text-[#1a1a2e]">
-      <div className="islamic-pattern-overlay" />
+    <main className="min-h-screen bg-[#fdfbf7] text-[#1a1a2e]">
       <div className="relative z-10 p-6 md:p-10">
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-4">
               <Image
-                src="/logo.svg"
+                src="/logo.png"
                 alt={masjid.name}
                 width={50}
                 height={50}
@@ -242,7 +240,7 @@ export default function AdminPage() {
           </div>
 
           {/* Daily Prayers */}
-          <section className="rounded-2xl islamic-card p-6">
+          <section className="rounded-2xl bg-white shadow-sm border border-black/10 p-6">
             <h2 className="text-lg font-semibold mb-4">Daily Prayer Jamaat Times</h2>
             <p className="text-sm text-[#1a1a2e]/50 mb-4">Enter times in 24-hour format (HH:MM)</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -269,7 +267,7 @@ export default function AdminPage() {
           </section>
 
           {/* Jummah Slots */}
-          <section className="rounded-2xl islamic-card p-6">
+          <section className="rounded-2xl bg-white shadow-sm border border-black/10 p-6">
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h2 className="text-lg font-semibold">Jumu&apos;ah Slots</h2>

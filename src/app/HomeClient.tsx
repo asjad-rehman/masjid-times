@@ -57,13 +57,8 @@ const QURAN_VERSES = [
 
 const STALENESS_THRESHOLD_MS = 14 * 24 * 60 * 60 * 1000; // 14 days
 
-/**
- * BUG #2 FIX: Use real UTC `now` to compare against adhan times (which are real UTC Dates).
- * Previously we compared a "fake" Date from nowInMasjidTZ() against real UTC adhan times,
- * which broke for users in different timezones.
- */
 function getNextPrayerInfo(
-  now: Date, // real UTC now — NOT the fake nowInMasjidTZ
+  now: Date,
   today: ReturnType<typeof getAdhanTimes>,
   tomorrow: ReturnType<typeof getAdhanTimes>
 ): { key: PrayerKey; label: string; at: Date } {
@@ -89,7 +84,7 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
   const [use24Hour, setUse24Hour] = useState(false);
   const [verseIndex, setVerseIndex] = useState(0);
   const [verseFading, setVerseFading] = useState(false);
-  const [apiError, setApiError] = useState(false); // BUG #4 FIX
+  const [apiError, setApiError] = useState(false);
 
   // Live clock interval
   useEffect(() => {
@@ -97,7 +92,7 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
     return () => clearInterval(id);
   }, []);
 
-  // Poll for Jamaat updates from API — BUG #4 FIX: track errors
+  // Poll for Jamaat updates from API
   useEffect(() => {
     let active = true;
     let consecutiveFailures = 0;
@@ -141,20 +136,18 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
     return () => clearInterval(id);
   }, []);
 
-  // Time calculations — BUG #2 FIX: todayTz for adhan day resolution, real `now` for comparisons
+  // Time calculations
   const todayTz = useMemo(() => todayInMasjidTZ(now, masjid.timezone), [now]);
   const tomorrowTz = useMemo(() => addDays(todayTz, 1), [todayTz]);
 
   const adhanToday = useMemo(() => getAdhanTimes(todayTz), [todayTz]);
   const adhanTomorrow = useMemo(() => getAdhanTimes(tomorrowTz), [tomorrowTz]);
 
-  // BUG #2 FIX: pass real `now` (UTC) for comparison, not the fake nowInMasjidTZ
   const next = useMemo(
     () => getNextPrayerInfo(now, adhanToday, adhanTomorrow),
     [now, adhanToday, adhanTomorrow]
   );
 
-  // BUG #2 FIX: countdown uses real UTC timestamps
   const countdown = useMemo(() => {
     const diff = next.at.getTime() - now.getTime();
     return msToHMS(diff);
@@ -170,9 +163,8 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
     }).format(now);
   }, [now]);
 
-  // BUG #3 FIX: detect stale jamaat times
   const isStale = useMemo(() => {
-    if (!jamaat.updatedAt) return true; // no timestamp = assume stale
+    if (!jamaat.updatedAt) return true;
     const updatedMs = new Date(jamaat.updatedAt).getTime();
     if (isNaN(updatedMs)) return true;
     return Date.now() - updatedMs > STALENESS_THRESHOLD_MS;
@@ -222,49 +214,50 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
   const jummahSlots = jamaat.jummah ?? [];
 
   return (
-    <main className="min-h-screen islamic-bg text-[#1a1a2e] flex flex-col justify-between">
+    <main className="min-h-screen islamic-bg flex flex-col justify-between">
       <div className="islamic-pattern-overlay" />
 
-      <div className="relative z-10 w-full max-w-lg mx-auto px-4 py-6 sm:py-10 flex-1 flex flex-col gap-5">
+      <div className="relative z-10 w-full max-w-lg mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col gap-6">
         
         {/* Header */}
-        <header className="flex flex-col items-center text-center gap-2 mt-2">
-          <div className="h-14 w-14 flex items-center justify-center rounded-full bg-white p-2 border border-emerald-700/10 shadow-sm">
-            <img src="/logo.svg" alt="Masjid Logo" className="h-full w-full object-contain" />
+        <header className="flex flex-col items-center text-center gap-3">
+          {/* Logo container - sharp edges, dark premium background */}
+          <div className="h-16 w-16 flex items-center justify-center bg-slate-900 border border-slate-700/50 shadow-2xl">
+            <img src="/logo.svg" alt="Masjid Logo" className="h-10 w-10 object-contain filter invert opacity-90" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-[#1a1a2e]">{masjid.name}</h1>
-            <p className="text-[10px] text-emerald-800/80 font-bold uppercase tracking-widest mt-0.5">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-100">{masjid.name}</h1>
+            <p className="text-[11px] text-emerald-500 font-bold uppercase tracking-[0.2em] mt-1">
               Prayer Times Portal
             </p>
           </div>
         </header>
 
-        {/* BUG #4 FIX: API Error Banner */}
+        {/* API Error Banner */}
         {apiError && (
-          <div className="rounded-xl border border-red-400/30 bg-red-50 p-3 text-center">
-            <p className="text-xs font-bold text-red-700">⚠️ Unable to reach the server</p>
-            <p className="text-[10px] text-red-600/70 mt-0.5">
+          <div className="border border-red-900/50 bg-red-950/40 p-4 text-center backdrop-blur-md">
+            <p className="text-xs font-bold text-red-400 tracking-wide uppercase">⚠️ Unable to reach server</p>
+            <p className="text-[10px] text-red-300/70 mt-1">
               Jamaat times shown may be outdated. Adhan times are always accurate.
             </p>
           </div>
         )}
 
-        {/* BUG #3 FIX: Staleness Warning */}
+        {/* Staleness Warning */}
         {isStale && !apiError && (
-          <div className="rounded-xl border border-amber-400/30 bg-amber-50 p-3 text-center">
-            <p className="text-xs font-bold text-amber-800">⏰ Jamaat times may be outdated</p>
-            <p className="text-[10px] text-amber-700/70 mt-0.5">
+          <div className="border border-amber-900/50 bg-amber-950/40 p-4 text-center backdrop-blur-md">
+            <p className="text-xs font-bold text-amber-500 tracking-wide uppercase">⏰ Jamaat times may be outdated</p>
+            <p className="text-[10px] text-amber-200/70 mt-1">
               {lastUpdatedLabel ?? "Last update date unknown"} — please verify with the masjid.
             </p>
           </div>
         )}
 
         {/* Date, Time, and Toggle */}
-        <section className="islamic-card rounded-2xl p-4 flex items-center justify-between shadow-sm">
+        <section className="islamic-card p-5 flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-800">{todayString}</span>
-            <span className="text-xs text-slate-500 font-medium tracking-wide mt-0.5 tabular-nums">
+            <span className="text-xs font-bold text-slate-200">{todayString}</span>
+            <span className="text-sm text-emerald-400 font-mono tracking-widest mt-1">
               {new Intl.DateTimeFormat("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -276,68 +269,71 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
           </div>
           <button
             onClick={() => setUse24Hour(!use24Hour)}
-            className="text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1.5 rounded-xl border border-emerald-500/15 bg-white/80 hover:bg-emerald-500/10 transition-colors shadow-sm"
+            className="sharp-btn text-[10px]"
           >
-            {use24Hour ? "Use AM/PM" : "Use 24H"}
+            {use24Hour ? "12H" : "24H"}
           </button>
         </section>
 
-        {/* Next Prayer Panel */}
-        <section className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-center shadow-sm">
-          <div className="text-[10px] font-black text-emerald-800 uppercase tracking-widest">
+        {/* Next Prayer Panel - Sharp architectural highlight */}
+        <section className="border-l-4 border-l-emerald-500 bg-slate-900/60 p-5 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+          {/* Subtle gradient glow inside the next prayer panel */}
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-emerald-500/10 blur-3xl pointer-events-none" />
+          
+          <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">
             Next Adhan
           </div>
-          <div className="mt-1 text-lg font-bold text-[#1a1a2e]">
-            {next.label} at <span className="text-emerald-700">{formatDateObj(next.at)}</span>
+          <div className="mt-2 text-2xl font-bold text-slate-100 tracking-tight">
+            {next.label} <span className="text-slate-400 font-light mx-1">at</span> <span className="text-emerald-400">{formatDateObj(next.at)}</span>
           </div>
-          <div className="mt-1 text-xs text-emerald-900/60 font-semibold">
-            Remaining: <span className="tabular-nums font-bold text-emerald-700">{countdown}</span>
+          <div className="mt-2 text-xs text-slate-400 font-medium">
+            Remaining time <span className="font-mono text-emerald-300 ml-1 bg-emerald-950/50 px-2 py-0.5 border border-emerald-900/50">{countdown}</span>
           </div>
         </section>
 
         {/* Prayer Timeline */}
-        <section className="flex flex-col gap-2">
+        <section className="flex flex-col gap-3">
           {prayersList.map((p) => {
             const isNext = next.key === p.key;
             return (
               <div
                 key={p.key}
-                className={`flex items-center justify-between rounded-xl p-3 px-4 border transition-all duration-300 ${
-                  isNext
-                    ? "islamic-tile-highlight border-l-4 border-l-emerald-600 scale-[1.01]"
-                    : "islamic-tile"
+                className={`flex items-center justify-between p-4 px-5 ${
+                  isNext ? "islamic-tile-highlight" : "islamic-tile"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-base">{p.icon}</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className={`font-bold text-sm ${isNext ? "text-emerald-900" : "text-[#1a1a2e]"}`}>
+                <div className="flex items-center gap-4">
+                  <span className="text-xl opacity-80">{p.icon}</span>
+                  <div className="flex items-center gap-2">
+                    <span className={`font-bold tracking-wide ${isNext ? "text-emerald-400" : "text-slate-200"}`}>
                       {p.label}
                     </span>
                     {isNext && (
-                      <span className="text-[8px] font-black uppercase text-emerald-600 tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-md animate-pulse">
-                        Next
+                      <span className="text-[9px] font-black uppercase text-slate-900 tracking-wider bg-emerald-500 px-1.5 py-0.5 shadow-[0_0_10px_rgba(16,185,129,0.5)]">
+                        NEXT
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="flex gap-8 text-right font-medium text-slate-700">
-                  <div className="w-14">
-                    <span className="block text-[8px] uppercase tracking-wider text-slate-400">Adhan</span>
-                    <span className="tabular-nums text-xs font-semibold">{p.adhan}</span>
+                <div className="flex gap-6 sm:gap-10 text-right">
+                  <div className="w-16">
+                    <span className="block text-[9px] uppercase tracking-[0.15em] text-slate-500 mb-0.5">Adhan</span>
+                    <span className="font-mono text-sm text-slate-300">{p.adhan}</span>
                   </div>
-                  <div className="w-14">
-                    <span className="block text-[8px] uppercase tracking-wider text-slate-400">Jamaat</span>
+                  <div className="w-16 relative">
+                    {/* Subtle divider line between Adhan and Jamaat */}
+                    <div className="absolute -left-3 sm:-left-5 top-1 bottom-1 w-[1px] bg-slate-700/50" />
+                    <span className="block text-[9px] uppercase tracking-[0.15em] text-slate-500 mb-0.5">Jamaat</span>
                     <span
-                      className={`tabular-nums text-xs font-bold ${
+                      className={`font-mono text-sm font-bold ${
                         p.isSunrise
-                          ? "text-slate-300"
+                          ? "text-slate-600"
                           : p.jamaat
                           ? isNext
-                            ? "text-emerald-900"
-                            : "text-emerald-700"
-                          : "text-slate-400"
+                            ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]"
+                            : "text-amber-500"
+                          : "text-slate-600"
                       }`}
                     >
                       {p.isSunrise ? "—" : p.jamaat ?? "—"}
@@ -350,22 +346,22 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
         </section>
 
         {/* Jumu'ah */}
-        <section className="jummah-tile rounded-2xl p-4 shadow-sm">
-          <h3 className="text-xs font-extrabold uppercase tracking-widest text-amber-800 flex items-center gap-1.5 border-b border-amber-500/10 pb-2 mb-3">
-            <span>🕌</span> Jumu&apos;ah Schedule
+        <section className="jummah-tile p-5">
+          <h3 className="text-xs font-black uppercase tracking-[0.15em] text-amber-500 flex items-center gap-2 border-b border-amber-500/20 pb-3 mb-4">
+            <span className="text-lg opacity-90">🕌</span> Jumu'ah Schedule
           </h3>
           <div className="space-y-3">
             {jummahSlots.length === 0 ? (
-              <p className="text-xs text-slate-400 italic">No schedule set.</p>
+              <p className="text-xs text-slate-500 italic">No schedule set.</p>
             ) : (
               jummahSlots.map((slot, i) => (
-                <div key={i} className="flex justify-between items-center bg-white/40 border border-amber-600/10 rounded-xl p-2.5 px-3">
-                  <span className="text-xs font-bold text-amber-900">
+                <div key={i} className="flex justify-between items-center bg-slate-900/50 border border-slate-700/50 p-3 px-4">
+                  <span className="text-xs font-bold text-amber-500/90 tracking-wide">
                     {jummahSlots.length > 1 ? `${i === 0 ? "1st" : i === 1 ? "2nd" : `${i + 1}th`} Jumu'ah` : "Jumu'ah"}
                   </span>
-                  <div className="flex gap-4 text-xs font-bold text-slate-800">
-                    <span className="tabular-nums">Khutbah: {formatTimeStr(slot.khutbah)}</span>
-                    <span className="tabular-nums text-emerald-800">Salah: {formatTimeStr(slot.salah)}</span>
+                  <div className="flex gap-5 text-sm font-mono text-slate-300">
+                    <span><span className="text-[9px] font-sans text-slate-500 uppercase tracking-widest mr-1">Khutbah</span>{formatTimeStr(slot.khutbah)}</span>
+                    <span className="text-amber-400"><span className="text-[9px] font-sans text-amber-600/70 uppercase tracking-widest mr-1">Salah</span>{formatTimeStr(slot.salah)}</span>
                   </div>
                 </div>
               ))
@@ -373,57 +369,48 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
           </div>
         </section>
 
-        {/* Donate */}
-        <section className="islamic-card rounded-2xl p-4 flex items-center justify-between gap-4 shadow-sm">
-          <div className="flex-1">
-            <h3 className="text-xs font-bold text-slate-800">Support Your Masjid</h3>
-            <p className="text-[10px] text-slate-500 mt-1 leading-normal">
-              Help maintain the House of Allah. Scan to donate.
-            </p>
-          </div>
-          <div className="shrink-0 p-1.5 bg-white rounded-xl border border-slate-200/60 shadow-inner">
-            <img src="/donation-qr.png" alt="Donate QR" className="h-16 w-16 object-contain" />
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="flex flex-col items-center gap-3 border-t border-slate-200/50 pt-4 mt-2">
-          {/* BUG #3 FIX: show last updated in footer */}
+        {/* Footer Links */}
+        <footer className="flex flex-col items-center gap-4 border-t border-slate-800 pt-6 mt-4 pb-2">
           {lastUpdatedLabel && (
-            <span className={`text-[10px] font-medium ${isStale ? "text-amber-600" : "text-slate-400"}`}>
-              Jamaat times {lastUpdatedLabel.toLowerCase()}
+            <span className={`text-[10px] font-medium tracking-wide uppercase ${isStale ? "text-amber-600/80" : "text-slate-600"}`}>
+              Jamaat {lastUpdatedLabel.toLowerCase()}
             </span>
           )}
-          <div className="flex flex-row justify-center gap-4 text-xs font-bold">
-            <a href="/display" className="text-emerald-800 hover:text-emerald-600 transition-colors">
-              📺 TV Mode
+          <div className="flex flex-row justify-center gap-5 text-xs font-bold tracking-wider uppercase">
+            <a href="/display" className="text-emerald-500 hover:text-emerald-400 transition-colors">
+              TV Mode
             </a>
-            <span className="text-slate-300 font-normal">|</span>
-            <a href="/api/ical" download="prayer-times.ics" className="text-emerald-800 hover:text-emerald-600 transition-colors">
-              📅 Export iCal
+            <span className="text-slate-800">|</span>
+            <a href="/api/ical" download="prayer-times.ics" className="text-emerald-500 hover:text-emerald-400 transition-colors">
+              iCal
             </a>
-            <span className="text-slate-300 font-normal">|</span>
-            <a href="/admin" className="text-slate-500 hover:text-slate-700 transition-colors">
-              🔒 Admin
+            <span className="text-slate-800">|</span>
+            <a href="/admin" className="text-slate-500 hover:text-slate-400 transition-colors">
+              Admin
             </a>
           </div>
         </footer>
 
       </div>
 
-      {/* Quran Verses */}
-      <div className="w-full bg-[#eef2ee]/60 border-t border-slate-200/40 py-3 px-4 mt-8 backdrop-blur-sm relative z-20">
+      {/* Quran Verses - Sharp Container */}
+      <div className="w-full quran-container py-4 px-5 mt-8 relative z-20">
         <div
-          className={`max-w-md mx-auto text-center flex flex-col gap-1 transition-all duration-500 ${
-            verseFading ? "opacity-0 scale-[0.98]" : "opacity-100 scale-100"
+          className={`max-w-2xl mx-auto text-center flex flex-col gap-3 transition-all duration-700 ${
+            verseFading ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
           }`}
         >
-          <span className="quran-arabic text-sm text-[#1a1a2e] block">
+          <span className="quran-arabic text-xl sm:text-2xl text-slate-100 block px-4">
             {currentVerse.arabic}
           </span>
-          <span className="text-[10px] text-slate-500 leading-relaxed block">
-            &ldquo;{currentVerse.english}&rdquo; &mdash; <span className="font-bold text-emerald-800/80">{currentVerse.ref}</span>
-          </span>
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-xs sm:text-sm text-slate-400 font-light italic tracking-wide">
+              &ldquo;{currentVerse.english}&rdquo;
+            </span>
+            <span className="text-[10px] font-bold tracking-widest uppercase text-amber-600/80 mt-1">
+              {currentVerse.ref}
+            </span>
+          </div>
         </div>
       </div>
     </main>

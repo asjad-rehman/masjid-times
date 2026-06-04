@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8f5ef;
-  --foreground: #1a1a2e;
+  --background: #020617; /* Deep slate / near black */
+  --foreground: #e2e8f0; /* Soft white */
+  --accent-gold: #fbbf24;
+  --accent-gold-dark: #b45309;
+  --accent-emerald: #10b981;
+  --accent-emerald-dark: #047857;
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-border-highlight: rgba(16, 185, 129, 0.2);
 }
 
 @theme inline {
@@ -16,196 +23,162 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-/* ================= Islamic Theme — Light ================= */
+/* ================= Premium Dark Theme ================= */
 
 .islamic-bg {
-  background: linear-gradient(170deg, #f5f0e6 0%, #eef2ee 30%, #f0ece4 60%, #eaefe8 100%);
+  background-color: var(--background);
   position: relative;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Subtle Islamic geometric pattern overlay */
+/* Dynamic Animated Mesh Gradient */
 .islamic-pattern-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background-image:
-    /* Soft emerald glow top-left */
-    radial-gradient(ellipse 600px 400px at 10% 10%, rgba(16, 185, 129, 0.07), transparent),
-    /* Warm gold glow bottom-right */
-    radial-gradient(ellipse 500px 350px at 90% 80%, rgba(191, 155, 48, 0.06), transparent),
-    /* Center emerald hint */
-    radial-gradient(ellipse 300px 300px at 50% 50%, rgba(16, 185, 129, 0.04), transparent);
+  background:
+    radial-gradient(circle at 15% 50%, rgba(4, 120, 87, 0.15), transparent 25vw),
+    radial-gradient(circle at 85% 30%, rgba(180, 83, 9, 0.15), transparent 25vw);
+  animation: mesh-shift 20s ease-in-out infinite alternate;
 }
 
-/* Geometric Islamic star pattern (pure CSS) */
+@keyframes mesh-shift {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Geometric Islamic star pattern overlay - strictly sharp */
 .islamic-pattern-overlay::before {
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.03;
+  opacity: 0.02;
   background-image:
-    /* 8-pointed star lattice using layered radial gradients */
-    radial-gradient(circle 2px at 20px 20px, #0d6b4f 100%, transparent),
-    radial-gradient(circle 2px at 60px 20px, #0d6b4f 100%, transparent),
-    radial-gradient(circle 2px at 20px 60px, #0d6b4f 100%, transparent),
-    radial-gradient(circle 2px at 60px 60px, #0d6b4f 100%, transparent),
-    radial-gradient(circle 2px at 40px 40px, #8b7328 100%, transparent),
-    /* Connecting lines via thin gradients */
-    linear-gradient(45deg, transparent 45%, #0d6b4f 46%, #0d6b4f 54%, transparent 55%),
-    linear-gradient(-45deg, transparent 45%, #0d6b4f 46%, #0d6b4f 54%, transparent 55%);
-  background-size: 80px 80px;
+    linear-gradient(45deg, var(--accent-emerald) 1px, transparent 1px),
+    linear-gradient(-45deg, var(--accent-gold) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px;
 }
 
-/* ================= Cards & Tiles ================= */
+/* ================= Glassmorphism & Sharp Architecture ================= */
 
+/* Sharp, brutalist glass panels */
 .islamic-card {
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(16, 185, 129, 0.12);
-  backdrop-filter: blur(12px);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.06),
-    0 4px 16px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 0 !important; /* Strictly no rounded corners */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
 .islamic-tile {
-  background: rgba(255, 255, 255, 0.70);
-  border-color: rgba(16, 185, 129, 0.10);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    0 4px 12px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.islamic-tile:hover {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
 }
 
 .islamic-tile-highlight {
-  background: rgba(16, 185, 129, 0.10);
-  border-color: rgba(16, 185, 129, 0.35);
-  box-shadow:
-    0 0 20px rgba(16, 185, 129, 0.08),
-    0 4px 16px rgba(16, 185, 129, 0.06),
-    0 0 0 1px rgba(16, 185, 129, 0.15),
-    inset 0 1px 0 rgba(16, 185, 129, 0.08);
+  background: rgba(4, 120, 87, 0.1);
+  border: 1px solid var(--glass-border-highlight);
+  border-left: 4px solid var(--accent-emerald);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0 !important;
+  box-shadow: 
+    0 0 20px rgba(16, 185, 129, 0.05),
+    inset 0 0 10px rgba(16, 185, 129, 0.02);
+  transform: scale(1.02);
+  transform-origin: center left;
+  animation: subtle-pulse 3s infinite alternate;
+}
+
+@keyframes subtle-pulse {
+  0% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.05); }
+  100% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.15); }
 }
 
 .jummah-tile {
-  background:
-    linear-gradient(135deg, rgba(191, 155, 48, 0.12), rgba(16, 185, 129, 0.08), rgba(191, 155, 48, 0.06));
-  border-color: rgba(191, 155, 48, 0.25);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    0 4px 12px rgba(191, 155, 48, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-top: 3px solid var(--accent-gold-dark);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 0 !important;
   position: relative;
   overflow: hidden;
 }
 
-.jummah-tile::before {
+.jummah-tile::after {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: linear-gradient(45deg, transparent 40%, rgba(251, 191, 36, 0.03) 50%, transparent 60%);
+  background-size: 200% 200%;
+  animation: shimmer 8s infinite linear;
   pointer-events: none;
-  opacity: 0.05;
-  background-image:
-    repeating-conic-gradient(
-      rgba(191, 155, 48, 0.6) 0% 25%,
-      transparent 0% 50%
-    );
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
 }
 
-.jummah-tile-highlight {
-  background:
-    linear-gradient(135deg, rgba(191, 155, 48, 0.18), rgba(16, 185, 129, 0.12), rgba(191, 155, 48, 0.10));
-  border-color: rgba(191, 155, 48, 0.40);
-  box-shadow:
-    0 0 24px rgba(191, 155, 48, 0.10),
-    0 4px 16px rgba(191, 155, 48, 0.06),
-    0 0 0 1px rgba(191, 155, 48, 0.20),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  position: relative;
-  overflow: hidden;
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
-.jummah-tile-highlight::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.07;
-  background-image:
-    repeating-conic-gradient(
-      rgba(191, 155, 48, 0.6) 0% 25%,
-      transparent 0% 50%
-    );
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+/* ================= Sharp UI Elements ================= */
+
+.sharp-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--foreground);
+  border-radius: 0 !important;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-/* ================= Quran Ayah Bar ================= */
-
-.quran-bar {
-  background: linear-gradient(90deg, rgba(191, 155, 48, 0.10), rgba(16, 185, 129, 0.06), rgba(191, 155, 48, 0.10));
-  border-top: 1px solid rgba(191, 155, 48, 0.18);
-  padding: 10px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  min-height: 52px;
-  backdrop-filter: blur(12px);
+.sharp-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.quran-ayah-content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  white-space: nowrap;
-  transition: opacity 0.6s ease-in-out;
-}
+/* ================= Quran Ayah Section ================= */
 
-.quran-ayah-fade-in {
-  opacity: 1;
-}
-
-.quran-ayah-fade-out {
-  opacity: 0;
-}
-
-.quran-bismillah-icon {
-  font-size: clamp(18px, 2vw, 28px);
-  color: rgba(150, 120, 30, 0.70);
-  flex-shrink: 0;
+.quran-container {
+  background: rgba(2, 6, 23, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .quran-arabic {
   font-family: "Traditional Arabic", "Scheherazade", "Amiri", serif;
-  font-size: clamp(16px, 1.8vw, 26px);
-  color: rgba(26, 26, 46, 0.90);
+  color: #f8fafc;
   direction: rtl;
-  line-height: 1.6;
-}
-
-.quran-english {
-  font-size: clamp(12px, 1.2vw, 18px);
-  color: rgba(26, 26, 46, 0.60);
-  font-style: italic;
-}
-
-.quran-separator {
-  color: rgba(150, 120, 30, 0.35);
-  font-size: clamp(14px, 1.4vw, 20px);
-  flex-shrink: 0;
-}
-
-.quran-ref {
-  font-size: clamp(10px, 0.9vw, 14px);
-  color: rgba(150, 120, 30, 0.50);
-  flex-shrink: 0;
+  line-height: 1.8;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }

@@ -256,32 +256,22 @@ export default function DisplayPage() {
 
       <div
         className={[
-          "flex-1 min-h-0 w-full p-4 md:p-6 grid gap-4 md:gap-5 grid-rows-[auto_1fr_auto] relative z-10",
+          "flex-1 min-h-0 w-full p-4 md:p-6 flex flex-col gap-4 md:gap-5 relative z-10",
         ].join(" ")}
       >
         {/* Header */}
         <header className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <Image
               src="/logo.png"
               alt={masjid.name}
-              width={80}
-              height={80}
-              className={isPortraitScreen ? "w-[60px] h-[60px]" : "w-[80px] h-[80px]"}
+              width={280}
+              height={140}
+              className="object-contain max-h-[100px] md:max-h-[140px] w-auto"
               priority
             />
-            <div>
-              <h1
-                className={[
-                  "font-semibold tracking-tight",
-                  isPortraitScreen ? "text-[clamp(20px,4vw,44px)]" : "text-[clamp(24px,2.8vw,48px)]",
-                ].join(" ")}
-              >
-                {masjid.name}
-              </h1>
-              <p className="mt-1 opacity-60 text-[clamp(11px,1vw,16px)]">
-                {todayDate}
-              </p>
+            <div className="opacity-60 text-[clamp(14px,1.5vw,22px)] self-end pb-2">
+              {todayDate}
             </div>
           </div>
 
@@ -299,7 +289,7 @@ export default function DisplayPage() {
         {/* Tiles */}
         <section
           className={[
-            "h-full min-h-0 grid gap-4 md:gap-5",
+            "flex-1 min-h-0 grid gap-4 md:gap-5",
             isPortraitScreen ? "grid-cols-2 grid-rows-3" : "grid-cols-3 grid-rows-2",
           ].join(" ")}
         >
@@ -335,13 +325,22 @@ export default function DisplayPage() {
           <DonationTile />
         </section>
 
+        {/* Floating Quran Ayah Bar */}
+        <div className="bg-white/90 backdrop-blur-md shadow-sm border border-black/10 rounded-2xl px-6 py-3 text-center transition-opacity duration-500 mx-auto w-full max-w-5xl" style={{ opacity: ayahFading ? 0 : 1 }}>
+          <div className="flex flex-col items-center">
+            <span className="font-arabic text-xl md:text-2xl mb-1 text-[#2b2216]">{currentAyah.arabic}</span>
+            <span className="italic text-sm md:text-base text-[#2b2216]/80">&ldquo;{currentAyah.english}&rdquo;</span>
+            <span className="text-xs text-[#8b1e0b] mt-1">[{currentAyah.ref}]</span>
+          </div>
+        </div>
+
         {/* Footer */}
-        <footer className="rounded-2xl bg-white shadow-sm border border-black/10 flex items-center justify-between px-6 py-3">
+        <footer className="rounded-2xl bg-white shadow-sm border border-black/10 flex items-center justify-between px-6 py-3 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-[clamp(14px,1.4vw,24px)] text-amber-700">&#9774;</span>
             <div className="text-[clamp(14px,1.4vw,26px)]">
               Jumu&apos;ah:{" "}
-              <span className="font-semibold text-amber-800">
+              <span className="font-semibold text-amber-800 whitespace-nowrap">
                 1st &mdash; {fmt12From24(jummah1Time)}
                 &nbsp;&nbsp;&bull;&nbsp;&nbsp;
                 2nd &mdash; {fmt12From24(jummah2Time)}
@@ -353,20 +352,11 @@ export default function DisplayPage() {
             <div className="text-[clamp(11px,1vw,16px)] opacity-50">
               Next Prayer
             </div>
-            <div className="text-[clamp(14px,1.4vw,24px)] font-semibold tabular-nums">
+            <div className="text-[clamp(14px,1.4vw,24px)] font-semibold tabular-nums whitespace-nowrap">
               <span className="text-amber-700">{nextLabel}</span> &bull; {formatTime(next.at)} &bull; {countdown}
             </div>
           </div>
         </footer>
-      </div>
-
-      {/* Floating Quran Ayah Bar */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md shadow-lg border border-black/10 rounded-2xl px-6 py-4 text-center w-[90%] max-w-4xl z-10 transition-opacity duration-500" style={{ opacity: ayahFading ? 0 : 1 }}>
-        <div className="flex flex-col items-center">
-          <span className="font-arabic text-2xl md:text-3xl mb-2 text-[#2b2216]">{currentAyah.arabic}</span>
-          <span className="italic text-[#2b2216]/80">&ldquo;{currentAyah.english}&rdquo;</span>
-          <span className="text-xs text-[#8b1e0b] mt-1">[{currentAyah.ref}]</span>
-        </div>
       </div>
     </main>
   );
@@ -491,7 +481,7 @@ function Tile({
           <div className="opacity-50 text-[clamp(11px,0.9vw,16px)]">
             Adhan
           </div>
-          <div className="mt-2 font-semibold tracking-tight tabular-nums text-[clamp(28px,3vw,64px)] leading-none text-[#1a1a2e]">
+          <div className="mt-2 font-semibold tracking-tight tabular-nums text-[clamp(28px,3vw,64px)] leading-none text-[#1a1a2e] whitespace-nowrap">
             {adhan}
           </div>
         </div>
@@ -499,7 +489,7 @@ function Tile({
         {jamaat ? (
           <div className="text-right min-w-0">
             <div className="opacity-50 text-[clamp(11px,0.9vw,16px)]">Jamaat</div>
-            <div className="mt-2 font-semibold tracking-tight tabular-nums text-[clamp(28px,3vw,64px)] leading-none text-emerald-700">
+            <div className="mt-2 font-semibold tracking-tight tabular-nums text-[clamp(28px,3vw,64px)] leading-none text-emerald-700 whitespace-nowrap">
               {jamaat}
             </div>
           </div>

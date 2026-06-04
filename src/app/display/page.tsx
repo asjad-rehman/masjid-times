@@ -252,33 +252,32 @@ export default function DisplayPage() {
   const currentAyah = QURAN_AYAHS[ayahIndex];
 
   return (
-    <main className="h-screen w-screen overflow-hidden bg-[#fdfbf7] text-[#1a1a2e] font-serif">
-      {/* Full-page grid: header | tiles | footer */}
-      <div className="h-full w-full p-4 md:p-6 grid grid-rows-[auto_1fr_auto] gap-3 md:gap-4">
+    <main className="h-screen w-screen overflow-hidden bg-[#f5f0e8] text-[#2b2216] font-serif">
+      <div className="h-full w-full p-4 md:p-5 grid grid-rows-[auto_1fr_auto] gap-3 md:gap-4">
 
         {/* ── Header ── */}
-        <header className="flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-6">
+        <header className="flex items-center justify-between">
+          <div className="flex items-center gap-5">
             <Image
               src="/logo.png"
               alt={masjid.name}
               width={280}
               height={140}
-              className="object-contain max-h-[80px] md:max-h-[110px] w-auto"
+              className="object-contain max-h-[70px] md:max-h-[100px] w-auto"
               priority
             />
-            <div className="opacity-60 text-[clamp(14px,1.5vw,22px)] whitespace-nowrap">
+            <div className="text-[clamp(13px,1.3vw,20px)] text-[#2b2216]/50 whitespace-nowrap italic">
               {todayDate}
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white shadow-sm border border-black/10 px-6 py-3 text-center shrink-0">
-            <div className="font-semibold tabular-nums text-[clamp(26px,2.8vw,52px)] whitespace-nowrap">
+          <div className="bg-[#2b2216] text-[#f5f0e8] px-8 py-3 text-center" style={{ clipPath: "polygon(4% 0%, 96% 0%, 100% 100%, 0% 100%)" }}>
+            <div className="font-semibold tabular-nums text-[clamp(28px,3vw,56px)] whitespace-nowrap tracking-wide">
               {clock}
             </div>
-            <div className="mt-1 text-[clamp(11px,1vw,16px)] opacity-60 tabular-nums whitespace-nowrap">
-              Next: <span className="font-semibold text-amber-700">{nextLabel}</span>{" "}
-              in <span className="font-semibold text-amber-700">{countdown}</span>
+            <div className="text-[clamp(10px,0.9vw,15px)] text-[#f5f0e8]/70 tabular-nums whitespace-nowrap mt-1">
+              Next: <span className="font-semibold text-[#d4a843]">{nextLabel}</span>{" "}
+              in <span className="font-semibold text-[#d4a843]">{countdown}</span>
             </div>
           </div>
         </header>
@@ -321,28 +320,28 @@ export default function DisplayPage() {
           <DonationTile />
         </section>
 
-        {/* ── Footer (verse + info bar) ── */}
-        <footer className="rounded-2xl bg-white shadow-sm border border-black/10 px-6 py-3 shrink-0">
+        {/* ── Footer ── */}
+        <footer className="bg-[#2b2216] text-[#f5f0e8] px-6 py-3 shrink-0">
           {/* Quran Verse */}
           <div
             className="text-center transition-opacity duration-500 mb-2"
             style={{ opacity: ayahFading ? 0 : 1 }}
           >
-            <span className="font-arabic text-lg md:text-xl text-[#2b2216]">{currentAyah.arabic}</span>
-            <br />
-            <span className="italic text-sm text-[#2b2216]/80">&ldquo;{currentAyah.english}&rdquo;</span>
-            <span className="text-xs text-[#8b1e0b] ml-2">[{currentAyah.ref}]</span>
+            <span className="font-arabic text-lg md:text-xl text-[#d4a843]">{currentAyah.arabic}</span>
+            <span className="mx-3 text-[#f5f0e8]/30">|</span>
+            <span className="italic text-sm text-[#f5f0e8]/80">&ldquo;{currentAyah.english}&rdquo;</span>
+            <span className="text-xs text-[#d4a843]/70 ml-2">[{currentAyah.ref}]</span>
           </div>
 
-          <div className="w-full h-px bg-black/5 mb-2" />
+          <div className="w-full h-px bg-[#f5f0e8]/10 mb-2" />
 
-          {/* Info row: Jummah times + Next prayer */}
+          {/* Info row */}
           <div className="flex items-center justify-between whitespace-nowrap">
             <div className="flex items-center gap-3">
-              <span className="text-[clamp(14px,1.4vw,24px)] text-amber-700">&#9774;</span>
-              <span className="text-[clamp(14px,1.4vw,26px)]">
+              <span className="text-[clamp(14px,1.4vw,22px)] text-[#d4a843]">&#x1F54C;</span>
+              <span className="text-[clamp(13px,1.3vw,22px)] text-[#f5f0e8]/70">
                 Jumu&apos;ah:&nbsp;
-                <span className="font-semibold text-amber-800">
+                <span className="font-semibold text-[#d4a843]">
                   1st &mdash; {fmt12From24(jummah1Time)}
                   &nbsp;&nbsp;&bull;&nbsp;&nbsp;
                   2nd &mdash; {fmt12From24(jummah2Time)}
@@ -350,11 +349,14 @@ export default function DisplayPage() {
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
-              <span className="text-[clamp(11px,1vw,16px)] opacity-50">Next Prayer</span>
-              <span className="text-[clamp(14px,1.4vw,24px)] font-semibold tabular-nums">
-                <span className="text-amber-700">{nextLabel}</span>
-                &nbsp;&bull;&nbsp;{formatTime(next.at)}&nbsp;&bull;&nbsp;{countdown}
+            <div className="flex items-center gap-4">
+              <span className="text-[clamp(10px,0.9vw,14px)] text-[#f5f0e8]/40 uppercase tracking-wider">Next Prayer</span>
+              <span className="text-[clamp(14px,1.4vw,24px)] font-semibold tabular-nums text-[#d4a843]">
+                {nextLabel}
+                <span className="text-[#f5f0e8]/50">&nbsp;&bull;&nbsp;</span>
+                <span className="text-[#f5f0e8]">{formatTime(next.at)}</span>
+                <span className="text-[#f5f0e8]/50">&nbsp;&bull;&nbsp;</span>
+                <span className="text-[#f5f0e8]">{countdown}</span>
               </span>
             </div>
           </div>
@@ -381,35 +383,39 @@ function JummahTile({
   return (
     <div
       className={[
-        "rounded-2xl border p-5 flex flex-col justify-center min-h-0 transition-all duration-300",
+        "border-l-4 bg-white p-5 flex flex-col justify-center min-h-0 transition-all duration-300 overflow-hidden relative",
         highlight
-          ? "bg-[#b8860b]/10 border-[#b8860b] shadow-md scale-[1.01]"
-          : "bg-white border-black/10 shadow-sm",
+          ? "border-l-[#d4a843] shadow-lg bg-[#d4a843]/5"
+          : "border-l-[#8b6914]/30 shadow-sm",
       ].join(" ")}
     >
-      <div className="relative z-10 flex items-center gap-2">
+      {highlight && (
+        <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-[#d4a843] animate-pulse" />
+      )}
+
+      <div className="flex items-center gap-2">
         <span className="text-[clamp(16px,1.4vw,28px)]">&#x1F54C;</span>
-        <span className="font-bold text-amber-800 text-[clamp(18px,1.6vw,34px)]">
+        <span className="font-bold text-[#8b6914] text-[clamp(18px,1.6vw,34px)]">
           Jummah
         </span>
       </div>
 
-      <div className="relative z-10 mt-3 space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="font-medium text-amber-900/60 text-[clamp(14px,1.3vw,24px)] whitespace-nowrap">1st Jummah</span>
-          <span className="font-semibold tabular-nums text-[clamp(20px,2.2vw,48px)] leading-none text-amber-800 whitespace-nowrap">
+      <div className="mt-3 space-y-1">
+        <div className="flex items-baseline justify-between">
+          <span className="font-medium text-[#2b2216]/40 text-[clamp(12px,1.1vw,20px)] whitespace-nowrap uppercase tracking-wider">1st</span>
+          <span className="font-semibold tabular-nums text-[clamp(22px,2.4vw,50px)] leading-none text-[#8b6914] whitespace-nowrap">
             {jummah1}
           </span>
         </div>
-        <div className="flex items-center justify-between mt-1">
-          <span className="font-medium text-amber-900/60 text-[clamp(14px,1.3vw,24px)] whitespace-nowrap">2nd Jummah</span>
-          <span className="font-semibold tabular-nums text-[clamp(20px,2.2vw,48px)] leading-none text-amber-800 whitespace-nowrap">
+        <div className="flex items-baseline justify-between">
+          <span className="font-medium text-[#2b2216]/40 text-[clamp(12px,1.1vw,20px)] whitespace-nowrap uppercase tracking-wider">2nd</span>
+          <span className="font-semibold tabular-nums text-[clamp(22px,2.4vw,50px)] leading-none text-[#8b6914] whitespace-nowrap">
             {jummah2}
           </span>
         </div>
       </div>
 
-      <div className="relative z-10 mt-2 opacity-40 text-[clamp(10px,0.8vw,14px)]">
+      <div className="mt-2 text-[#2b2216]/30 text-[clamp(10px,0.8vw,13px)]">
         Adhan: {adhan}
       </div>
     </div>
@@ -420,8 +426,8 @@ function JummahTile({
 
 function DonationTile() {
   return (
-    <div className="rounded-2xl border border-black/10 bg-white shadow-sm p-5 flex flex-col items-center justify-center min-h-0">
-      <div className="font-semibold text-emerald-800 text-[clamp(16px,1.4vw,28px)]">
+    <div className="border-l-4 border-l-emerald-700/30 bg-white shadow-sm p-4 flex flex-col items-center justify-center min-h-0 overflow-hidden">
+      <div className="font-semibold text-emerald-800 text-[clamp(15px,1.3vw,26px)]">
         Support Your Masjid
       </div>
       <div className="mt-2 flex-1 flex items-center justify-center min-h-0">
@@ -430,13 +436,13 @@ function DonationTile() {
           alt="Scan to donate"
           width={200}
           height={200}
-          className="rounded-lg max-h-full w-auto object-contain"
+          className="max-h-full w-auto object-contain"
         />
       </div>
-      <p className="mt-2 text-center text-[clamp(11px,0.9vw,16px)] opacity-70 leading-snug">
+      <p className="mt-2 text-center text-[clamp(10px,0.8vw,14px)] text-[#2b2216]/50 leading-snug">
         Scan to donate &bull; Jazakum Allahu Khairan
       </p>
-      <p className="mt-1 text-center text-emerald-700 font-medium text-[clamp(10px,0.8vw,14px)] leading-snug italic">
+      <p className="mt-1 text-center text-emerald-700 font-medium text-[clamp(9px,0.7vw,13px)] leading-snug italic">
         &ldquo;Who is it that would loan Allah a goodly loan so He may multiply
         it for him many times over?&rdquo; &mdash; 2:245
       </p>
@@ -462,42 +468,46 @@ function Tile({
   return (
     <div
       className={[
-        "rounded-2xl border p-6 flex flex-col justify-center min-h-0 transition-all duration-300",
+        "border-l-4 bg-white p-5 flex flex-col justify-center min-h-0 transition-all duration-300 overflow-hidden relative",
         highlight
-          ? "bg-[#b8860b]/10 border-[#b8860b] shadow-md scale-[1.01]"
-          : "bg-white border-black/10 shadow-sm",
+          ? "border-l-[#d4a843] shadow-lg bg-[#d4a843]/5"
+          : "border-l-[#2b2216]/15 shadow-sm",
       ].join(" ")}
     >
-      <div className="flex items-center gap-3">
-        <span className="font-semibold opacity-80 text-[clamp(18px,1.6vw,34px)]">
+      {highlight && (
+        <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-[#d4a843] animate-pulse" />
+      )}
+
+      <div className="flex items-baseline gap-3">
+        <span className="font-bold text-[clamp(18px,1.6vw,34px)] text-[#2b2216]">
           {title}
         </span>
         {sunrise && (
-          <span className="opacity-50 text-[clamp(11px,0.9vw,16px)]">
+          <span className="text-[#2b2216]/40 text-[clamp(10px,0.8vw,14px)] whitespace-nowrap">
             Sunrise: {sunrise}
           </span>
         )}
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-5 items-end min-h-0">
+      <div className="mt-auto pt-3 flex items-end justify-between min-h-0">
         <div className="min-w-0">
-          <div className="opacity-50 text-[clamp(11px,0.9vw,16px)]">
+          <div className="text-[#2b2216]/40 text-[clamp(10px,0.8vw,14px)] uppercase tracking-wider">
             Adhan
           </div>
-          <div className="mt-2 font-semibold tracking-tight tabular-nums text-[clamp(28px,3vw,64px)] leading-none text-[#1a1a2e] whitespace-nowrap">
+          <div className="mt-1 font-semibold tracking-tight tabular-nums text-[clamp(28px,3vw,64px)] leading-none text-[#2b2216] whitespace-nowrap">
             {adhan}
           </div>
         </div>
 
         {jamaat ? (
           <div className="text-right min-w-0">
-            <div className="opacity-50 text-[clamp(11px,0.9vw,16px)]">Jamaat</div>
-            <div className="mt-2 font-semibold tracking-tight tabular-nums text-[clamp(28px,3vw,64px)] leading-none text-emerald-700 whitespace-nowrap">
+            <div className="text-[#2b2216]/40 text-[clamp(10px,0.8vw,14px)] uppercase tracking-wider">Jamaat</div>
+            <div className="mt-1 font-semibold tracking-tight tabular-nums text-[clamp(28px,3vw,64px)] leading-none text-emerald-700 whitespace-nowrap">
               {jamaat}
             </div>
           </div>
         ) : (
-          <div className="text-right opacity-20 text-[clamp(24px,2.2vw,48px)] leading-none">
+          <div className="text-right text-[#2b2216]/15 text-[clamp(24px,2.2vw,48px)] leading-none">
             —
           </div>
         )}
@@ -505,3 +515,4 @@ function Tile({
     </div>
   );
 }
+

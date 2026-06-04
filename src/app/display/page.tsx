@@ -226,8 +226,8 @@ export default function DisplayPage() {
   const todayDate = formatDate(now);
 
   // Use actual jamaat data for Jummah times
-  const jummah1Time = jamaat.jummah?.[0]?.salah || "12:15";
-  const jummah2Time = jamaat.jummah?.[1]?.salah || jamaat.jummah2?.[0]?.salah || "13:15";
+  const jummah1Time = jamaat.jummah?.[0]?.khutbah || "12:15";
+  const jummah2Time = jamaat.jummah?.[1]?.khutbah || jamaat.jummah2?.[0]?.khutbah || "13:15";
 
   const tiles = friday
     ? [

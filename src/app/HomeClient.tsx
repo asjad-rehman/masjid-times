@@ -46,12 +46,12 @@ const QURAN_VERSES = [
   },
   {
     arabic: "حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ وَقُومُوا لِلَّهِ قَانِتِينَ",
-    english: "Maintain with care the prayers and the middle prayer and stand before Allah, devoutly obedient.",
+    english: "Maintain with care the prayers and the middle prayer and stand before Allah.",
     ref: "Quran 2:238",
   },
   {
-    arabic: "أَقِمِ الصَّلَاةَ لِدُلُوكِ الشَّمْسِ إِلَىٰ غَسَقِ اللَّيْلِ وَقُرْآنَ الْفَجْرِ ۖ إِنَّ قُرْآنَ الْفَجْرِ كَانَ مَشْهُودًا",
-    english: "Establish prayer at the decline of the sun until the darkness of the night and the Quran recitation of dawn. Indeed, the recitation of dawn is ever witnessed.",
+    arabic: "أَقِمِ الصَّلَاةَ لِدُلُوكِ الشَّمْسِ إِلَىٰ غَسَقِ اللَّيْلِ وَقُرْآنَ الْفَجْرِ",
+    english: "Establish prayer at the decline of the sun until the darkness of the night.",
     ref: "Quran 17:78",
   },
 ];
@@ -80,11 +80,11 @@ function getNextPrayerInfo(
 export default function HomeClient({ initialJamaat }: HomeClientProps) {
   const [jamaat, setJamaat] = useState<Jamaat>(initialJamaat);
   const [now, setNow] = useState<Date>(() => new Date());
-  const [use24Hour, setUse24Hour] = useState(false); // default to 12h (AM/PM) format
+  const [use24Hour, setUse24Hour] = useState(false); // default 12h format
   const [verseIndex, setVerseIndex] = useState(0);
   const [verseFading, setVerseFading] = useState(false);
 
-  // Live Clock Trigger
+  // Live clock interval
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
@@ -121,7 +121,7 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
         setVerseIndex((prev) => (prev + 1) % QURAN_VERSES.length);
         setVerseFading(false);
       }, 500);
-    }, 10000);
+    }, 12000);
     return () => clearInterval(id);
   }, []);
 
@@ -226,334 +226,187 @@ export default function HomeClient({ initialJamaat }: HomeClientProps) {
   const jummahSlots = jamaat.jummah ?? [];
 
   return (
-    <main
-      className="min-h-screen text-slate-100 relative overflow-hidden font-sans flex flex-col justify-between"
-      style={{
-        background: "linear-gradient(160deg, #090e1a 0%, #0d1527 40%, #080c16 100%)",
-      }}
-    >
-      {/* Background radial blurs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-emerald-500/8 blur-[120px] animate-pulse duration-[8000ms]" />
-        <div className="absolute bottom-10 right-0 w-[450px] h-[450px] rounded-full bg-teal-500/6 blur-[100px]" />
-        <div className="absolute top-1/3 left-0 w-[350px] h-[350px] rounded-full bg-amber-500/5 blur-[90px]" />
-      </div>
+    <main className="min-h-screen islamic-bg text-[#1a1a2e] flex flex-col justify-between">
+      <div className="islamic-pattern-overlay" />
 
-      {/* Main Layout Container */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 py-8 sm:px-6 md:px-8 flex-1 flex flex-col gap-8">
+      {/* Main Responsive Grid Container */}
+      <div className="relative z-10 w-full max-w-lg mx-auto px-4 py-6 sm:py-10 flex-1 flex flex-col gap-5">
         
-        {/* Navigation & Header */}
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-white/5 pb-6">
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 shrink-0 flex items-center justify-center rounded-2xl bg-white p-2 shadow-[0_4px_20px_rgba(255,255,255,0.05)] border border-white/10">
-              <img src="/logo.svg" alt="Masjid Logo" className="h-full w-full object-contain" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-black tracking-tight sm:text-3xl text-white">
-                {masjid.name}
-              </h1>
-              <p className="text-xs text-slate-400 mt-1 flex items-center gap-1.5 font-medium">
-                <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-                Live Prayer Portal &middot; {masjid.calc.method.replaceAll("_", " ")}
-              </p>
-            </div>
+        {/* Minimalist Header */}
+        <header className="flex flex-col items-center text-center gap-2 mt-2">
+          <div className="h-14 w-14 flex items-center justify-center rounded-full bg-white p-2 border border-emerald-700/10 shadow-sm">
+            <img src="/logo.svg" alt="Masjid Logo" className="h-full w-full object-contain" />
           </div>
-
-          {/* Controls Panel */}
-          <div className="flex flex-wrap items-center gap-4">
-            {/* Format Toggle Switch */}
-            <div className="flex items-center bg-slate-900/60 border border-white/10 rounded-xl p-1 shadow-inner">
-              <button
-                onClick={() => setUse24Hour(false)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  !use24Hour
-                    ? "bg-emerald-500 text-slate-950 shadow-md"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                12H (AM/PM)
-              </button>
-              <button
-                onClick={() => setUse24Hour(true)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  use24Hour
-                    ? "bg-emerald-500 text-slate-950 shadow-md"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                24H
-              </button>
-            </div>
-
-            {/* Quick Action Navigation Buttons */}
-            <div className="flex items-center gap-2">
-              <a
-                href="/display"
-                className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700 border border-white/10 rounded-xl px-4 py-2 text-xs font-semibold transition shadow-md text-slate-200"
-              >
-                📺 TV Mode
-              </a>
-              <a
-                href="/api/ical"
-                download="prayer-times.ics"
-                className="flex items-center gap-1.5 bg-emerald-600/20 hover:bg-emerald-600/35 border border-emerald-500/30 rounded-xl px-4 py-2 text-xs font-semibold transition shadow-md text-emerald-300"
-              >
-                📅 Export iCal
-              </a>
-            </div>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-[#1a1a2e]">{masjid.name}</h1>
+            <p className="text-[10px] text-emerald-800/80 font-bold uppercase tracking-widest mt-0.5">
+              Islamic Center Hattiesburg
+            </p>
           </div>
         </header>
 
-        {/* Hero Section: Live Clock & Countdown */}
-        <section className="grid gap-6 md:grid-cols-[1fr_auto] items-stretch">
-          {/* Countdown / Next Prayer Card */}
-          <div className="rounded-3xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-6 sm:p-8 flex flex-col justify-between shadow-[0_8px_32px_rgba(0,0,0,0.3)] relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent pointer-events-none" />
-            
-            <div className="relative z-10">
-              <span className="text-xs font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-                UPCOMING PRAYER
-              </span>
-              <div className="mt-4 flex flex-col sm:flex-row sm:items-baseline sm:gap-4">
-                <span className="text-4xl sm:text-5xl font-black text-white tracking-tight">
-                  {next.label}
-                </span>
-                <span className="text-sm font-medium text-slate-400 mt-1">
-                  Adhan at {formatDateObj(next.at)}
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-8 relative z-10">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Remaining Time</div>
-              <div className="mt-1 text-4xl sm:text-5xl md:text-6xl font-black tracking-tight tabular-nums text-white bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-                {countdown}
-              </div>
-            </div>
-          </div>
-
-          {/* Local Clock Widget */}
-          <div className="rounded-3xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-6 sm:p-8 flex flex-col justify-center items-center sm:items-end text-center sm:text-right shadow-[0_8px_32px_rgba(0,0,0,0.3)] min-w-[240px]">
-            <div className="text-xs font-bold uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20 mb-3">
-              LIVE CLOCK
-            </div>
-            <div className="text-4xl font-extrabold tracking-tight tabular-nums text-white">
-              {new Intl.DateTimeFormat("en-US", {
+        {/* Date, Time, and 12/24H Toggler bar */}
+        <section className="islamic-card rounded-2xl p-4 flex items-center justify-between shadow-sm">
+          <div className="flex flex-col">
+            <span className="text-xs font-bold text-slate-800">{todayString}</span>
+            <span className="text-xs text-slate-500 font-medium tracking-wide mt-0.5 tabular-nums">
+              Clock: {new Intl.DateTimeFormat("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit",
                 hour12: !use24Hour,
                 timeZone: masjid.timezone,
               }).format(now)}
-            </div>
-            <div className="mt-2 text-sm font-semibold text-slate-200">
-              {todayString}
-            </div>
-            <div className="text-xs text-slate-400 mt-1">
-              Timezone: {masjid.timezone}
-            </div>
+            </span>
           </div>
-        </section>
-
-        {/* Main Content Dashboard Grid */}
-        <section className="grid gap-6 lg:grid-cols-[1fr_360px] items-start">
-          
-          {/* Main Prayer Times Grid */}
-          <div className="rounded-3xl border border-white/10 bg-slate-900/20 backdrop-blur-md p-5 sm:p-6 shadow-lg">
-            <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-4">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-slate-300">
-                Today's Prayer Timeline
-              </h2>
-              <div className="flex gap-16 text-xs font-bold uppercase tracking-widest text-slate-500 pr-4 sm:pr-8">
-                <span>Adhan</span>
-                <span>Jamaat</span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              {prayersList.map((p) => {
-                const isNext = next.key === p.key;
-                return (
-                  <div
-                    key={p.key}
-                    className={`flex items-center justify-between rounded-2xl border px-4 py-4 transition-all duration-300 ${
-                      isNext
-                        ? "border-emerald-500/40 bg-emerald-500/10 shadow-[0_0_25px_rgba(16,185,129,0.15)] scale-[1.01]"
-                        : "border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10"
-                    }`}
-                  >
-                    {/* Prayer Info */}
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl sm:text-2xl">{p.icon}</span>
-                      <div className="flex items-center gap-2">
-                        <span className={`text-base font-extrabold ${isNext ? "text-emerald-300" : "text-white"}`}>
-                          {p.label}
-                        </span>
-                        {isNext && (
-                          <span className="rounded-full bg-emerald-400/25 border border-emerald-400/40 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-emerald-400 animate-pulse">
-                            Next
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Prayer Times columns */}
-                    <div className="flex items-center gap-10 sm:gap-20 text-right font-medium">
-                      <div className="w-16 sm:w-20">
-                        <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Adhan</div>
-                        <div className="mt-0.5 text-sm sm:text-base font-bold tabular-nums text-slate-200">
-                          {p.adhan}
-                        </div>
-                      </div>
-                      <div className="w-16 sm:w-20">
-                        <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Jamaat</div>
-                        <div
-                          className={`mt-0.5 text-sm sm:text-base font-extrabold tabular-nums ${
-                            p.isSunrise
-                              ? "text-slate-500"
-                              : p.jamaat
-                              ? isNext
-                                ? "text-emerald-300"
-                                : "text-emerald-400"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {p.isSunrise ? "—" : p.jamaat ?? "—"}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <aside className="flex flex-col gap-6">
-            
-            {/* Jumu'ah Card */}
-            <div className="rounded-3xl border border-amber-500/20 bg-amber-500/[0.04] p-6 shadow-md backdrop-blur-md relative overflow-hidden group">
-              {/* Conic glowing effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
-              
-              <div className="relative z-10 flex items-center justify-between border-b border-amber-500/10 pb-4">
-                <h3 className="text-sm font-bold uppercase tracking-widest text-amber-300 flex items-center gap-2">
-                  <span>🕌</span> Jumu'ah Schedule
-                </h3>
-                <span className="text-xs font-bold text-amber-400/80 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md">
-                  Friday
-                </span>
-              </div>
-
-              <div className="relative z-10 mt-4 space-y-4">
-                {jummahSlots.length === 0 ? (
-                  <p className="text-sm text-slate-400 italic">No slots scheduled.</p>
-                ) : (
-                  jummahSlots.map((slot, i) => (
-                    <div
-                      key={i}
-                      className="rounded-2xl border border-white/5 bg-slate-900/50 p-4 transition-all duration-300 hover:border-amber-500/20"
-                    >
-                      {jummahSlots.length > 1 && (
-                        <div className="mb-3 text-[10px] font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 inline-block px-2 py-0.5 rounded">
-                          {i === 0 ? "1st" : i === 1 ? "2nd" : `${i + 1}rd`} Service
-                        </div>
-                      )}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="border-r border-white/5">
-                          <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
-                            Khutbah
-                          </span>
-                          <span className="text-base font-bold tabular-nums text-slate-100 mt-1 block">
-                            {formatTimeStr(slot.khutbah)}
-                          </span>
-                        </div>
-                        <div className="pl-2">
-                          <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
-                            Salah
-                          </span>
-                          <span className="text-base font-black tabular-nums text-amber-300 mt-1 block">
-                            {formatTimeStr(slot.salah)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            {/* Support/Donation Card */}
-            <div className="rounded-3xl border border-emerald-500/20 bg-emerald-500/[0.03] p-6 shadow-md backdrop-blur-md flex flex-col items-center text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent pointer-events-none" />
-              
-              <h3 className="text-sm font-bold uppercase tracking-widest text-emerald-300 flex items-center gap-2 relative z-10">
-                <span>❤️</span> Support Your Masjid
-              </h3>
-              <p className="text-xs text-slate-400 mt-2 max-w-[280px] leading-relaxed relative z-10">
-                Establish prayer and help maintain the House of Allah. scan to contribute.
-              </p>
-
-              <div className="mt-5 p-2 bg-white rounded-2xl shadow-lg relative z-10 transition-transform duration-300 group-hover:scale-[1.02] border border-white/10">
-                <img
-                  src="/donation-qr.png"
-                  alt="Scan to Donate QR Code"
-                  className="h-32 w-32 object-contain"
-                />
-              </div>
-
-              <div className="mt-4 text-[10px] font-black uppercase text-emerald-400 tracking-widest bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 relative z-10">
-                Scan to Donate
-              </div>
-
-              <p className="mt-3 text-[10px] italic text-slate-400 leading-normal border-t border-white/5 pt-3 w-full">
-                "Who is it that would loan Allah a goodly loan so He may multiply it for him?" &mdash; Quran 2:245
-              </p>
-            </div>
-
-          </aside>
-        </section>
-      </div>
-
-      {/* Footer Area with Quran Verses Carousel */}
-      <footer className="w-full mt-auto relative z-10 bg-slate-950/80 border-t border-white/5 backdrop-blur-lg">
-        {/* Quran verse ticker */}
-        <div className="w-full border-b border-white/5 py-4 px-4 overflow-hidden min-h-[64px] flex items-center justify-center">
-          <div
-            className={`max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-3 text-center transition-all duration-500 ${
-              verseFading ? "opacity-0 translate-y-1" : "opacity-100 translate-y-0"
-            }`}
+          <button
+            onClick={() => setUse24Hour(!use24Hour)}
+            className="text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1.5 rounded-xl border border-emerald-500/15 bg-white/80 hover:bg-emerald-500/10 transition-colors shadow-sm"
           >
-            <span className="text-xl md:text-2xl text-amber-500 shrink-0">﷽</span>
-            <span className="text-sm font-medium text-slate-300 italic tracking-wide">
-              &ldquo;{currentVerse.english}&rdquo;
-            </span>
-            <span className="text-xs font-bold text-amber-500/70 uppercase tracking-widest shrink-0">
-              {currentVerse.ref}
-            </span>
-          </div>
-        </div>
+            {use24Hour ? "Use AM/PM" : "Use 24H"}
+          </button>
+        </section>
 
-        <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-center sm:text-left">
-            <div className="text-xs text-slate-400">
-              &copy; {new Date().getFullYear()} {masjid.name} &middot; All Rights Reserved.
-            </div>
-            <div className="text-[10px] text-slate-500 mt-1">
-              Coordinates: {masjid.coordinates.lat}, {masjid.coordinates.lon} &middot; Calculations for {masjid.timezone}
-            </div>
+        {/* Simplistic Countdown Panel */}
+        <section className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-center shadow-sm">
+          <div className="text-[10px] font-black text-emerald-800 uppercase tracking-widest">
+            Next Adhan
           </div>
+          <div className="mt-1 text-lg font-bold text-[#1a1a2e]">
+            {next.label} at <span className="text-emerald-700">{formatDateObj(next.at)}</span>
+          </div>
+          <div className="mt-1 text-xs text-emerald-900/60 font-semibold">
+            Remaining: <span className="tabular-nums font-bold text-emerald-700">{countdown}</span>
+          </div>
+        </section>
 
-          <div className="flex items-center gap-4">
-            <a
-              href="/admin"
-              className="text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-white/10 rounded-xl px-4 py-2 transition-colors hover:bg-slate-800"
-            >
-              🔒 Admin Login
+        {/* Prayer Timeline Grid */}
+        <section className="flex flex-col gap-2">
+          {prayersList.map((p) => {
+            const isNext = next.key === p.key;
+            return (
+              <div
+                key={p.key}
+                className={`flex items-center justify-between rounded-xl p-3 px-4 border transition-all duration-300 ${
+                  isNext
+                    ? "islamic-tile-highlight border-l-4 border-l-emerald-600 scale-[1.01]"
+                    : "islamic-tile"
+                }`}
+              >
+                {/* Name */}
+                <div className="flex items-center gap-3">
+                  <span className="text-base">{p.icon}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`font-bold text-sm ${isNext ? "text-emerald-900" : "text-[#1a1a2e]"}`}>
+                      {p.label}
+                    </span>
+                    {isNext && (
+                      <span className="text-[8px] font-black uppercase text-emerald-600 tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-md animate-pulse">
+                        Now
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Times */}
+                <div className="flex gap-8 text-right font-medium text-slate-700">
+                  <div className="w-14">
+                    <span className="block text-[8px] uppercase tracking-wider text-slate-400">Adhan</span>
+                    <span className="tabular-nums text-xs font-semibold">{p.adhan}</span>
+                  </div>
+                  <div className="w-14">
+                    <span className="block text-[8px] uppercase tracking-wider text-slate-400">Jamaat</span>
+                    <span
+                      className={`tabular-nums text-xs font-bold ${
+                        p.isSunrise
+                          ? "text-slate-300"
+                          : p.jamaat
+                          ? isNext
+                            ? "text-emerald-900"
+                            : "text-emerald-700"
+                          : "text-slate-400"
+                      }`}
+                    >
+                      {p.isSunrise ? "—" : p.jamaat ?? "—"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </section>
+
+        {/* Jumu'ah Section Card */}
+        <section className="jummah-tile rounded-2xl p-4 shadow-sm">
+          <h3 className="text-xs font-extrabold uppercase tracking-widest text-amber-800 flex items-center gap-1.5 border-b border-amber-500/10 pb-2 mb-3">
+            <span>🕌</span> Jumu'ah Schedule
+          </h3>
+          <div className="space-y-3">
+            {jummahSlots.length === 0 ? (
+              <p className="text-xs text-slate-400 italic">No schedule set.</p>
+            ) : (
+              jummahSlots.map((slot, i) => (
+                <div key={i} className="flex justify-between items-center bg-white/40 border border-amber-600/10 rounded-xl p-2.5 px-3">
+                  <span className="text-xs font-bold text-amber-900">
+                    {jummahSlots.length > 1 ? `${i === 0 ? "1st" : i === 1 ? "2nd" : `${i + 1}th`} Khutbah` : "Salah"}
+                  </span>
+                  <div className="flex gap-4 text-xs font-bold text-slate-800">
+                    <span className="tabular-nums">Speech: {formatTimeStr(slot.khutbah)}</span>
+                    <span className="tabular-nums text-emerald-800">Salah: {formatTimeStr(slot.salah)}</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
+
+        {/* Minimalist Donate Box */}
+        <section className="islamic-card rounded-2xl p-4 flex items-center justify-between gap-4 shadow-sm">
+          <div className="flex-1">
+            <h3 className="text-xs font-bold text-slate-800">Support Hattiesburg Masjid</h3>
+            <p className="text-[10px] text-slate-500 mt-1 leading-normal">
+              Establish prayer and support the maintenance of the House of Allah. Scan to donate.
+            </p>
+          </div>
+          <div className="shrink-0 p-1.5 bg-white rounded-xl border border-slate-200/60 shadow-inner">
+            <img src="/donation-qr.png" alt="Donate QR" className="h-16 w-16 object-contain" />
+          </div>
+        </section>
+
+        {/* Clean Footer Controls */}
+        <footer className="flex flex-col items-center gap-3 border-t border-slate-200/50 pt-4 mt-2">
+          <div className="flex flex-row justify-center gap-4 text-xs font-bold">
+            <a href="/display" className="text-emerald-800 hover:text-emerald-600 transition-colors">
+              📺 TV Mode
+            </a>
+            <span className="text-slate-300 font-normal">|</span>
+            <a href="/api/ical" download="prayer-times.ics" className="text-emerald-800 hover:text-emerald-600 transition-colors">
+              📅 Export iCal
+            </a>
+            <span className="text-slate-300 font-normal">|</span>
+            <a href="/admin" className="text-slate-500 hover:text-slate-700 transition-colors">
+              🔒 Admin
             </a>
           </div>
+        </footer>
+
+      </div>
+
+      {/* Simplified Rotating Quran Verses */}
+      <div className="w-full bg-[#eef2ee]/60 border-t border-slate-200/40 py-3 px-4 mt-8 backdrop-blur-sm relative z-20">
+        <div
+          className={`max-w-md mx-auto text-center flex flex-col gap-1 transition-all duration-500 ${
+            verseFading ? "opacity-0 scale-[0.98]" : "opacity-100 scale-100"
+          }`}
+        >
+          <span className="quran-arabic text-sm text-[#1a1a2e] block">
+            {currentVerse.arabic}
+          </span>
+          <span className="text-[10px] text-slate-500 leading-relaxed block">
+            &ldquo;{currentVerse.english}&rdquo; &mdash; <span className="font-bold text-emerald-800/80">{currentVerse.ref}</span>
+          </span>
         </div>
-      </footer>
+      </div>
     </main>
   );
 }
